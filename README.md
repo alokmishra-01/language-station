@@ -134,6 +134,16 @@ against your key, so a deployment without one is an open tab for anyone who find
 Unset — the default, and how the station runs at the event — means anyone who can reach
 the page can talk. Set it and the page asks once and remembers.
 
+## Running your own copy
+
+MIT licensed — take it, change the languages, run it at your own school. You need
+your own [Cartesia](https://cartesia.ai) key in `.env` (see `.env.example`) and your
+own agents: `python3 agent/create_agents.py` creates them and rewrites `agents.json`.
+The ids committed here point at mine, and they are useless without my key.
+
+The printable A4 sheets in `posters/pdf/` need no setup at all — a colour printer and
+some cardboard.
+
 ## Layout
 
 ```
