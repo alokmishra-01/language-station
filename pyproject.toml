@@ -1,0 +1,10 @@
+# Only here to pin the runtime for Vercel, which otherwise generates this file
+# itself and picks the version for us. The station has no dependencies at all -
+# everything it needs is in the standard library, which is why there is no
+# requirements.txt either. Local development uses whatever python3 you have.
+[project]
+name = "language-station"
+version = "1.0.0"
+requires-python = "~=3.12.0"
+dependencies = []
+classifiers = ["Private :: Do Not Upload"]

@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+cache/
+backups/
+.DS_Store
+.playwright-mcp/
+.vercel
+public/
+*.part
+uv.lock
+.vercel/
+
+# stray debug screenshots
+/*.png

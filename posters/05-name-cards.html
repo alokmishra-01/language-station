@@ -1,0 +1,96 @@
+<meta charset="utf-8">
+<title>05 · Take-home name cards</title>
+<link rel="stylesheet" href="_print.css">
+<style>
+  .quad { padding: 0; display: grid; grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr; }
+  .card { padding: 8mm 8mm 7mm; border-right: 1.2pt dashed #cfc7dc;
+          border-bottom: 1.2pt dashed #cfc7dc; position: relative;
+          display: flex; flex-direction: column; }
+  .card:nth-child(2), .card:nth-child(4) { border-right: 0; }
+  .card:nth-child(3), .card:nth-child(4) { border-bottom: 0; }
+
+  .card .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .card .top .eyebrow { font-size: 7.5pt; letter-spacing: .14em; }
+  .card .top .mark { font-family: var(--od); font-size: 17pt; color: var(--saffron); line-height: 1; }
+
+  .card h2 { font-size: 15pt; font-weight: 800; margin: 3mm 0 1mm; letter-spacing: -.01em; }
+  .card .say { font-size: 8pt; color: var(--dim); margin: 0 0 3mm; line-height: 1.35; }
+
+  .frame { flex: 1; min-height: 26mm; border: 1.6pt solid var(--rule);
+           border-radius: 3mm; background: var(--cream); position: relative; }
+  .frame .base { position: absolute; left: 6mm; right: 6mm; bottom: 8mm;
+                 border-top: 1pt dashed #c0b3d0; }
+
+  .words { display: flex; gap: 3mm; margin-top: 3.5mm; }
+  .words div { flex: 1; }
+  .words .g { font-family: var(--od); font-size: 15pt; line-height: 1.2; }
+  .words .r { font-size: 7.5pt; color: var(--dim); }
+  .words .e { font-size: 8pt; font-weight: 700; }
+
+  .card .tail { margin-top: 3mm; font-size: 7pt; color: var(--dim); line-height: 1.4;
+                border-top: 1pt solid var(--rule); padding-top: 2mm; }
+  .card .tail b { color: var(--coral); }
+</style>
+
+<div class="noprint">
+  <b>The thing they walk away holding.</b> Four A6 cards per sheet. Print <code>15–25 sheets</code>
+  (= 60–100 cards), guillotine or scissor down the dashed lines before the event.<br>
+  How it works at the table: visitor types their name on the screen, sees it in Odia — then
+  <b>copies it by hand</b> into the cream box. Copying an unfamiliar script is the moment it
+  stops being decoration and starts being writing. Put out fine-tip black pens.
+</div>
+
+<section class="sheet quad">
+  <div class="card">
+    <div class="top"><span class="eyebrow">My name in Odia</span><span class="mark">ଓଡ଼ିଆ</span></div>
+    <h2>Copy it in.</h2>
+    <p class="say">Type your name on the screen, then draw it here yourself. Slowly.</p>
+    <div class="frame"><div class="base"></div></div>
+    <div class="words">
+      <div><div class="g">ନମସ୍କାର</div><div class="r">namaskaara</div><div class="e">hello</div></div>
+      <div><div class="g">ଧନ୍ୟବାଦ</div><div class="r">dhanyabaada</div><div class="e">thank you</div></div>
+    </div>
+    <p class="tail">Odia letters are round because they were scratched onto <b>palm leaves</b> —
+      a straight line would have split the leaf.</p>
+  </div>
+
+  <div class="card">
+    <div class="top"><span class="eyebrow">My name in Odia</span><span class="mark">ଓଡ଼ିଆ</span></div>
+    <h2>Copy it in.</h2>
+    <p class="say">Type your name on the screen, then draw it here yourself. Slowly.</p>
+    <div class="frame"><div class="base"></div></div>
+    <div class="words">
+      <div><div class="g">ନମସ୍କାର</div><div class="r">namaskaara</div><div class="e">hello</div></div>
+      <div><div class="g">ଧନ୍ୟବାଦ</div><div class="r">dhanyabaada</div><div class="e">thank you</div></div>
+    </div>
+    <p class="tail">Odia letters are round because they were scratched onto <b>palm leaves</b> —
+      a straight line would have split the leaf.</p>
+  </div>
+
+  <div class="card">
+    <div class="top"><span class="eyebrow">My name in Odia</span><span class="mark">ଓଡ଼ିଆ</span></div>
+    <h2>Copy it in.</h2>
+    <p class="say">Type your name on the screen, then draw it here yourself. Slowly.</p>
+    <div class="frame"><div class="base"></div></div>
+    <div class="words">
+      <div><div class="g">ନମସ୍କାର</div><div class="r">namaskaara</div><div class="e">hello</div></div>
+      <div><div class="g">ଧନ୍ୟବାଦ</div><div class="r">dhanyabaada</div><div class="e">thank you</div></div>
+    </div>
+    <p class="tail">Odia letters are round because they were scratched onto <b>palm leaves</b> —
+      a straight line would have split the leaf.</p>
+  </div>
+
+  <div class="card">
+    <div class="top"><span class="eyebrow">My name in Odia</span><span class="mark">ଓଡ଼ିଆ</span></div>
+    <h2>Copy it in.</h2>
+    <p class="say">Type your name on the screen, then draw it here yourself. Slowly.</p>
+    <div class="frame"><div class="base"></div></div>
+    <div class="words">
+      <div><div class="g">ନମସ୍କାର</div><div class="r">namaskaara</div><div class="e">hello</div></div>
+      <div><div class="g">ଧନ୍ୟବାଦ</div><div class="r">dhanyabaada</div><div class="e">thank you</div></div>
+    </div>
+    <p class="tail">Odia letters are round because they were scratched onto <b>palm leaves</b> —
+      a straight line would have split the leaf.</p>
+  </div>
+</section>

@@ -1,0 +1,151 @@
+<meta charset="utf-8">
+<title>02 · Script Detective</title>
+<link rel="stylesheet" href="_print.css">
+<style>
+  .deva { font-family: 'Kohinoor Devanagari','Devanagari Sangam MN',serif; }
+  .taml { font-family: 'Tamil Sangam MN',serif; }
+  .gujr { font-family: 'Kohinoor Gujarati','Gujarati Sangam MN',serif; }
+  .knda { font-family: 'Kannada Sangam MN','Noto Sans Kannada',serif; }
+  .beng { font-family: 'Kohinoor Bangla','Bangla Sangam MN',serif; }
+  .telu { font-family: 'Kohinoor Telugu','Telugu Sangam MN',serif; }
+  .guru { font-family: 'Gurmukhi Sangam MN','Gurmukhi MN',serif; }
+  .mlym { font-family: 'Malayalam Sangam MN',serif; }
+  .orya { font-family: var(--od); }
+
+  .grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 4mm; }
+  .cell { border: 1.5pt solid var(--rule); border-radius: 4mm; text-align: center;
+          padding: 3mm 2mm; position: relative; }
+  .cell .lab { position: absolute; top: 2mm; left: 3mm; font-size: 9pt;
+               font-weight: 800; color: var(--coral); }
+  .cell .g   { line-height: 1.35; }
+  .cell .r   { font-size: 9.5pt; color: var(--dim); letter-spacing: .04em; }
+
+  .clue { background: var(--cream); border-left: 4pt solid var(--saffron);
+          padding: 5mm 6mm; border-radius: 0 3mm 3mm 0; }
+  .clue h3 { font-size: 12pt; margin-bottom: 2mm; }
+  .clue p  { margin: 0; font-size: 10.5pt; line-height: 1.5; }
+
+  .answer { display: flex; align-items: center; gap: 5mm; }
+  .answer .box { width: 26mm; height: 20mm; border: 2pt solid var(--ink);
+                 border-radius: 3mm; }
+  .answer .q { font-size: 15pt; font-weight: 800; }
+  .answer .q small { display: block; font-size: 9.5pt; font-weight: 500; color: var(--dim); }
+
+  /* --- wall sheet --- */
+  .wall .title { font-size: 40pt; font-weight: 800; letter-spacing: -.02em; }
+  .wall .lede  { font-size: 13pt; color: var(--ink-2); margin: 3mm 0 7mm; line-height: 1.4; }
+  .wall .cell .g { font-size: 40pt; }
+  .wall .grid { margin-bottom: 7mm; }
+  .wall .clue { margin-bottom: 6mm; }
+
+  /* --- handout: two A5s on one A4 --- */
+  .half { height: 148.4mm; padding: 9mm 10mm; position: relative; overflow: hidden; }
+  .half .title { font-size: 21pt; font-weight: 800; letter-spacing: -.02em; }
+  .half .lede  { font-size: 9.5pt; color: var(--ink-2); margin: 1.5mm 0 4mm; }
+  .half .cell { padding: 2mm 1mm; border-radius: 2.5mm; }
+  .half .cell .g { font-size: 22pt; }
+  .half .cell .r { font-size: 7pt; }
+  .half .cell .lab { font-size: 7.5pt; top: 1mm; left: 2mm; }
+  .half .grid { gap: 2.5mm; margin-bottom: 4mm; }
+  .half .clue { padding: 3mm 4mm; margin-bottom: 3.5mm; }
+  .half .clue h3 { font-size: 9.5pt; margin-bottom: 1mm; }
+  .half .clue p { font-size: 8.5pt; line-height: 1.4; }
+  .half .answer .box { width: 18mm; height: 13mm; }
+  .half .answer .q { font-size: 11pt; }
+  .half .answer .q small { font-size: 7.5pt; }
+  .scissors { position: absolute; left: 0; right: 0; top: 148.4mm;
+              border-top: 1.2pt dashed var(--dim); }
+  .scissors span { position: absolute; left: 4mm; top: -4.4mm; background: #fff;
+                   padding: 0 2mm; font-size: 8pt; color: var(--dim); }
+</style>
+
+<div class="noprint">
+  <b>Script Detective — the queue activity.</b> Only one visitor can wear the headset at a
+  time; this is what everyone else does while they wait.<br>
+  <b>Page 1</b> is the big version — print <code>1</code> and stand it on the table as the
+  reference.<br>
+  <b>Page 2</b> is two handouts on one sheet — print <code>20–30</code>, cut across the dashed
+  line, hand one to every person in the queue with a pencil.<br>
+  Answer is <b>F</b>. Don't print it — the point is that they ask you.
+</div>
+
+<!-- ============ page 1 · wall version ============ -->
+<section class="sheet wall">
+  <div class="eyebrow">Script Detective · No. 1</div>
+  <h1 class="title">Nine ways to write<br>one word.</h1>
+  <p class="lede">Every box below says <b>mother</b>. Say them out loud — they all sound almost
+    the same, <i>maa</i> or <i>amma</i>. Same word. Same sound. Nine different pictures.</p>
+
+  <div class="grid">
+    <div class="cell"><span class="lab">A</span><div class="g deva">माँ</div><div class="r">maa</div></div>
+    <div class="cell"><span class="lab">B</span><div class="g taml">அம்மா</div><div class="r">ammaa</div></div>
+    <div class="cell"><span class="lab">C</span><div class="g gujr">મા</div><div class="r">maa</div></div>
+    <div class="cell"><span class="lab">D</span><div class="g knda">ಅಮ್ಮ</div><div class="r">amma</div></div>
+    <div class="cell"><span class="lab">E</span><div class="g beng">মা</div><div class="r">maa</div></div>
+    <div class="cell"><span class="lab">F</span><div class="g orya">ମା</div><div class="r">maa</div></div>
+    <div class="cell"><span class="lab">G</span><div class="g telu">అమ్మ</div><div class="r">amma</div></div>
+    <div class="cell"><span class="lab">H</span><div class="g guru">ਮਾ</div><div class="r">maa</div></div>
+    <div class="cell"><span class="lab">I</span><div class="g mlym">അമ്മ</div><div class="r">amma</div></div>
+  </div>
+
+  <div class="clue">
+    <h3>Your clue</h3>
+    <p>Odia was written with an iron stylus on a dried palm leaf. A straight line cut along the
+      grain would slit the leaf in two — so Odia letters learned to <b>curve</b>. Look for the
+      roundest one. Look for the umbrella on top.</p>
+  </div>
+
+  <div class="answer">
+    <div class="box"></div>
+    <div class="q">Which one is Odia?
+      <small>Write the letter, then come and check at the screen.</small></div>
+  </div>
+
+  <div class="footer"><span>Odia Language Station</span><span class="od">ଓଡ଼ିଆ</span></div>
+</section>
+
+<!-- ============ page 2 · two handouts ============ -->
+<section class="sheet bleed">
+  <div class="half">
+    <div class="eyebrow">Script Detective</div>
+    <h1 class="title">Nine ways to write one word.</h1>
+    <p class="lede">Every box says <b>mother</b>. They all sound like <i>maa</i> or <i>amma</i>.</p>
+    <div class="grid">
+      <div class="cell"><span class="lab">A</span><div class="g deva">माँ</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">B</span><div class="g taml">அம்மா</div><div class="r">ammaa</div></div>
+      <div class="cell"><span class="lab">C</span><div class="g gujr">મા</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">D</span><div class="g knda">ಅಮ್ಮ</div><div class="r">amma</div></div>
+      <div class="cell"><span class="lab">E</span><div class="g beng">মা</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">F</span><div class="g orya">ମା</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">G</span><div class="g telu">అమ్మ</div><div class="r">amma</div></div>
+      <div class="cell"><span class="lab">H</span><div class="g guru">ਮਾ</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">I</span><div class="g mlym">അമ್മ</div><div class="r">amma</div></div>
+    </div>
+    <div class="clue"><h3>Clue</h3><p>Odia was scratched onto palm leaves with an iron stylus.
+      A straight line would slit the leaf — so the letters curved. Find the roundest one.</p></div>
+    <div class="answer"><div class="box"></div>
+      <div class="q">Which is Odia?<small>Then come and check at the screen.</small></div></div>
+    <div class="scissors"><span>cut here ✂</span></div>
+  </div>
+
+  <div class="half">
+    <div class="eyebrow">Script Detective</div>
+    <h1 class="title">Nine ways to write one word.</h1>
+    <p class="lede">Every box says <b>mother</b>. They all sound like <i>maa</i> or <i>amma</i>.</p>
+    <div class="grid">
+      <div class="cell"><span class="lab">A</span><div class="g deva">माँ</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">B</span><div class="g taml">அம்மா</div><div class="r">ammaa</div></div>
+      <div class="cell"><span class="lab">C</span><div class="g gujr">મા</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">D</span><div class="g knda">ಅಮ್ಮ</div><div class="r">amma</div></div>
+      <div class="cell"><span class="lab">E</span><div class="g beng">মা</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">F</span><div class="g orya">ମା</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">G</span><div class="g telu">అమ్మ</div><div class="r">amma</div></div>
+      <div class="cell"><span class="lab">H</span><div class="g guru">ਮਾ</div><div class="r">maa</div></div>
+      <div class="cell"><span class="lab">I</span><div class="g mlym">അമ്മ</div><div class="r">amma</div></div>
+    </div>
+    <div class="clue"><h3>Clue</h3><p>Odia was scratched onto palm leaves with an iron stylus.
+      A straight line would slit the leaf — so the letters curved. Find the roundest one.</p></div>
+    <div class="answer"><div class="box"></div>
+      <div class="q">Which is Odia?<small>Then come and check at the screen.</small></div></div>
+  </div>
+</section>

@@ -1,0 +1,99 @@
+/* Shared A4 print styles for the Odia Language Station posters.
+   Palette lifted from station.html so paper and screen match.
+   White paper is the ground everywhere except the hero band: a colour
+   printer laying ink over a whole A4 sheet cockles cheap paper and bands. */
+
+:root {
+  --ink:     #1d1033;   /* deep purple, the app's background, here as text */
+  --ink-2:   #34205c;
+  --dim:     #6b5b86;
+  --coral:   #ff7a59;
+  --saffron: #ffc247;
+  --teal:    #2ec4b6;
+  --cream:   #fff6e9;
+  --rule:    #e3dcef;
+
+  --od: 'Baloo Bhaina 2', 'Noto Sans Oriya', 'Oriya Sangam MN', sans-serif;
+  --sans: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Paper size. Without this, Chrome prints at its own default (US Letter,
+   612x792pt) and every sheet is cropped and followed by a blank page. */
+@page { size: A4; margin: 0; }
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: #b3aec2;           /* screen only: grey desk behind the sheets */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ---- one sheet = one A4 page ---------------------------------------- */
+
+.sheet {
+  position: relative;
+  width: 210mm;
+  height: 296.8mm;               /* a hair under 297 so it never spills a blank page */
+  padding: 14mm;
+  overflow: hidden;
+  background: #fff;
+  page-break-after: always;
+  break-after: page;
+}
+.sheet:last-child { page-break-after: auto; break-after: auto; }
+
+.sheet.land { width: 296.8mm; height: 210mm; }
+.sheet.bleed { padding: 0; }
+
+/* screen preview only */
+@media screen {
+  body { padding: 24px 0; }
+  .sheet { margin: 0 auto 24px; box-shadow: 0 6px 28px rgba(0,0,0,.35); }
+  .noprint {
+    max-width: 210mm; margin: 0 auto 22px; padding: 14px 18px;
+    background: var(--ink); color: var(--cream); border-radius: 12px;
+    font-size: 14px; line-height: 1.5;
+  }
+  .noprint b { color: var(--saffron); }
+  .noprint code { color: var(--teal); }
+}
+@media print { .noprint { display: none !important; } }
+
+/* ---- shared pieces --------------------------------------------------- */
+
+.od { font-family: var(--od); }
+
+.eyebrow {
+  font-size: 10pt; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.05; }
+
+.footer {
+  position: absolute; left: 14mm; right: 14mm; bottom: 10mm;
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 9pt; color: var(--dim);
+  border-top: 1.5pt solid var(--rule); padding-top: 3mm;
+}
+.footer .od { font-size: 13pt; color: var(--ink); }
+
+.tape { height: 6mm; display: flex; }
+.tape i { flex: 1; }
+.tape .c { background: var(--coral); }
+.tape .s { background: var(--saffron); }
+.tape .t { background: var(--teal); }
+.tape .p { background: var(--ink); }
+
+.cut {
+  border: 1.2pt dashed var(--dim);
+}
+.foldline {
+  position: absolute; left: 0; right: 0;
+  border-top: 1pt dashed #c9c2d6;
+}

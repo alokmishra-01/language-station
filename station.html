@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Language Station</title>
+<style>
+  /* Indic display faces first: Baloo Bhaina 2 (Odia) and Baloo family cover the
+     scripts here and ship with macOS, so this needs no webfont and works offline. */
+  :root {
+    --ink: #fff6e9;
+    --ink-dim: #c9b8d6;
+    --bg: #1d1033;
+    --bg-2: #2a1848;
+    --card: #34205c;
+    --card-2: #3d2769;
+    --coral: #ff7a59;
+    --saffron: #ffc247;
+    --teal: #2ec4b6;
+    --od: 'Baloo Bhaina 2', 'Noto Sans Oriya', 'Oriya Sangam MN', sans-serif;
+    --deva: 'Baloo 2', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Noto Sans Devanagari', sans-serif;
+    --knda: 'Baloo Tamma 2', 'Kannada Sangam MN', 'Noto Sans Kannada', sans-serif;
+    --telu: 'Baloo Tammudu 2', 'Telugu Sangam MN', 'Noto Sans Telugu', sans-serif;
+    --sans: ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, sans-serif;
+    --face: var(--sans);            /* swapped per language at runtime */
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: radial-gradient(1200px 800px at 20% -10%, var(--bg-2), var(--bg) 60%);
+    color: var(--ink); font-family: var(--sans);
+    overflow: hidden; user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .native { font-family: var(--face); }
+  button { font-family: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  /* ---------- shell ---------- */
+  #shell { height: 100%; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 14px; padding: 16px 26px; flex: 0 0 auto; }
+  /* the wordmark is a button: it is the way back to the start from any screen,
+     including mid-conversation, where the small "back" link is easy to miss */
+  .brand { display: flex; align-items: baseline; gap: 12px; min-width: 0; text-align: left;
+           padding: 7px 12px; margin-left: -12px; border-radius: 15px;
+           transition: background .12s ease; }
+  .brand .mark { font-family: var(--face); font-size: 36px; line-height: 1.2; color: var(--saffron); }
+  .brand .name { font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+  .brand .home { font-size: 13px; color: var(--teal); opacity: .75; white-space: nowrap; }
+  .brand:hover { background: #ffffff14; }
+  .brand:hover .name { color: var(--ink); }
+  .brand:hover .home { opacity: 1; }
+  .brand:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
+  .spacer { flex: 1; }
+
+  /* the language dropdown lives in the header so it is reachable from every view */
+  .picker { display: flex; align-items: center; gap: 9px; }
+  .picker label { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-dim); }
+  select#lang {
+    font-family: var(--sans); font-size: 17px; font-weight: 700;
+    color: var(--ink); background: #ffffff18; border: 1px solid #ffffff2e;
+    border-radius: 999px; padding: 10px 16px; cursor: pointer; outline: none;
+    -webkit-appearance: none; appearance: none; padding-right: 38px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink-dim) 50%),
+                      linear-gradient(135deg, var(--ink-dim) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+    background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+  }
+  select#lang:hover { background-color: #ffffff26; }
+  select#lang:focus-visible { border-color: var(--saffron); }
+  select#lang option { color: #16101f; background: #fff; }
+
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+          border-radius: 999px; font-size: 14px; background: #ffffff14; color: var(--ink-dim); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-dim); }
+  .dot.live { background: var(--teal); box-shadow: 0 0 0 0 #2ec4b6aa; animation: ping 1.8s infinite; }
+  .dot.warn { background: var(--saffron); }
+  .dot.bad  { background: var(--coral); }
+  @keyframes ping { 70% { box-shadow: 0 0 0 12px #2ec4b600; } 100% { box-shadow: 0 0 0 0 #2ec4b600; } }
+
+  main { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0 26px 24px; }
+  .view { width: 100%; max-width: 1180px; max-height: 100%; }
+
+  /* ---------- home ---------- */
+  .hero { text-align: center; }
+  .hero h1 { font-family: var(--face); font-size: clamp(56px, 10vw, 124px); margin: 0 0 2px; line-height: 1.15;
+            overflow-wrap: anywhere; }
+  .hero .say { font-size: clamp(17px, 2vw, 22px); color: var(--saffron); margin: 0 0 6px; }
+  .hero p { font-size: clamp(17px, 2.1vw, 24px); color: var(--ink-dim); margin: 0 0 34px; }
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+  .choice {
+    background: linear-gradient(160deg, var(--card), var(--card-2));
+    border-radius: 24px; padding: 30px 26px; text-align: left;
+    box-shadow: 0 14px 40px #0006; transition: transform .12s ease, box-shadow .12s ease;
+    display: flex; flex-direction: column; gap: 9px; min-height: 178px;
+  }
+  .choice:hover, .choice:focus-visible { transform: translateY(-4px); box-shadow: 0 20px 50px #0008; outline: none; }
+  .choice .big { font-size: 42px; line-height: 1; }
+  .choice .t { font-size: 23px; font-weight: 700; }
+  .choice .s { font-size: 15px; color: var(--ink-dim); line-height: 1.45; }
+  .choice.primary { background: linear-gradient(160deg, #ff7a59, #ff5f7e); }
+  .choice.primary .s { color: #ffffffd8; }
+
+  /* ---------- talk ---------- */
+  .talk { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: stretch; height: min(74vh, 610px); }
+  @media (max-width: 900px) { .talk { grid-template-columns: 1fr; height: auto; } }
+  .stage { background: linear-gradient(160deg, var(--card), #2b1a4e); border-radius: 28px;
+           padding: 26px 28px; display: flex; flex-direction: column; align-items: center;
+           gap: 14px; overflow: hidden; min-height: 0; }
+  .orb { width: 126px; height: 126px; border-radius: 50%; flex: 0 0 auto;
+         background: radial-gradient(circle at 35% 30%, #ffd28a, var(--coral) 55%, #c8407a);
+         transition: transform .18s ease; }
+  .orb.speaking { animation: breathe 1.5s ease-in-out infinite; }
+  .orb.listening { box-shadow: 0 0 0 18px #2ec4b622; }
+  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+
+  /* Only the caption grows, and never past its own box -- otherwise a long turn
+     paints over the orb and the buttons. */
+  .caption { flex: 1 1 auto; min-height: 0; width: 100%; text-align: center;
+             display: flex; flex-direction: column; gap: 11px;
+             align-items: center; justify-content: center; overflow: hidden; }
+  .caption .said { font-family: var(--face); font-size: clamp(29px, 4vw, 48px); line-height: 1.3; overflow-wrap: anywhere;
+                   max-width: 100%; overflow: hidden; display: -webkit-box;
+                   -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+  .caption .said.s2 { font-size: clamp(25px, 3.1vw, 37px); }
+  .caption .said.s3 { font-size: clamp(21px, 2.4vw, 29px); -webkit-line-clamp: 4; }
+  .caption .said.plain { font-family: var(--sans); font-size: clamp(19px, 2.1vw, 26px); line-height: 1.4; -webkit-line-clamp: 4; }
+  .caption .gloss { font-size: 16px; color: var(--ink-dim); line-height: 1.45; max-width: 46ch;
+                    overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+  .status { font-size: 15px; color: var(--ink-dim); flex: 0 0 auto; min-height: 1.4em; }
+  .stage .row, .stage .ptt { flex: 0 0 auto; }
+  .guide { background: #ffffff0f; border-radius: 28px; padding: 24px; overflow-y: auto; }
+  .guide h3 { margin: 0 0 6px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--saffron); }
+  .guide .lead { font-size: 20px; font-weight: 700; margin: 0 0 16px; line-height: 1.3; }
+  .guide ul { margin: 0; padding-left: 19px; }
+  .guide li { font-size: 16px; margin-bottom: 10px; line-height: 1.4; color: #efe4f6; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  .btn { padding: 14px 24px; border-radius: 999px; font-size: 17px; font-weight: 700; background: #ffffff1c; }
+  .btn:hover { background: #ffffff2b; }
+  .btn.go { background: var(--teal); color: #06231f; }
+  .btn.stop { background: var(--coral); color: #3b0f0a; }
+  .ptt { font-size: 14px; color: var(--ink-dim); display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 8px; }
+
+  /* ---------- explore ---------- */
+  .tabs { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tab { padding: 10px 18px; border-radius: 999px; background: #ffffff12; font-size: 16px; }
+  .tab[aria-selected="true"] { background: var(--saffron); color: #35240a; font-weight: 700; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 13px;
+          max-height: 56vh; overflow-y: auto; padding: 4px; }
+  .cell { background: linear-gradient(160deg, var(--card), var(--card-2)); border-radius: 20px;
+          padding: 18px 14px; text-align: center; transition: transform .1s ease;
+          display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .cell:hover { transform: translateY(-3px); }
+  .cell.playing { outline: 3px solid var(--teal); }
+  /* number cards show the native numeral big and the word under it -- the numeral is
+     the thing to notice, the word is the thing to say, and it is the word we speak. */
+  /* Native spans stretch to the card and may break inside a word. Telugu and Kannada
+     write without spaces, so a long word had no legal break point and sailed straight
+     out of its card across the next one. fitText() shrinks it before that happens. */
+  .cell .num, .cell .g, .cell .r, .cell .e {
+          align-self: stretch; max-width: 100%; overflow-wrap: anywhere; }
+  .cell .num { font-family: var(--face); font-size: 44px; line-height: 1.2; color: var(--saffron); }
+  .cell .g { font-family: var(--face); font-size: 40px; line-height: 1.25; }
+  .cell.numbered { gap: 2px; }
+  .cell.numbered .g { font-size: 28px; }
+  .cell .r { font-size: 14px; color: var(--saffron); }
+  .cell .e { font-size: 13px; color: var(--ink-dim); line-height: 1.35; }
+  .hint { font-size: 15px; color: var(--ink-dim); margin: 0 0 14px; }
+
+  /* ---------- name ---------- */
+  .namebox { text-align: center; }
+  .namebox input { font-family: var(--sans); font-size: 28px; padding: 16px 22px; border-radius: 20px;
+                   border: 2px solid #ffffff26; background: #ffffff10; color: var(--ink);
+                   width: min(430px, 90vw); text-align: center; outline: none; }
+  .namebox input:focus { border-color: var(--saffron); }
+  .result { font-family: var(--face); font-size: clamp(52px, 10vw, 118px); line-height: 1.3; margin: 22px 0 6px;
+            min-height: 1.3em; overflow-wrap: anywhere; }
+  .fact { font-size: 16px; color: var(--ink-dim); max-width: 620px; margin: 22px auto 0; line-height: 1.5; }
+
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+           background: #120a22e8; border: 1px solid #ffffff20; color: var(--ink);
+           padding: 14px 22px; border-radius: 16px; font-size: 16px; max-width: 84vw;
+           box-shadow: 0 14px 40px #0009; }
+  .back { font-size: 16px; color: var(--ink-dim); padding: 10px 4px; }
+  .back:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+<div id="shell">
+  <header>
+    <button class="brand" data-go="home" aria-label="Back to the start">
+      <span class="mark native" id="brand-mark">…</span>
+      <span class="name" id="brand-name">Language Station</span>
+      <span class="home">⌂ start</span>
+    </button>
+    <div class="spacer"></div>
+    <div class="picker">
+      <label for="lang">Language</label>
+      <select id="lang"></select>
+    </div>
+    <span class="pill" id="timer" hidden><span id="timer-t">3:30</span> left</span>
+    <span class="pill"><span class="dot" id="dot"></span><span id="state">ready</span></span>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="view hero" id="v-home">
+      <h1 class="native" id="hero-hello">…</h1>
+      <p class="say" id="hero-hint"></p>
+      <p id="hero-sub">Pick something to try.</p>
+      <div class="choices">
+        <button class="choice primary" data-go="talk">
+          <span class="big">🎧</span>
+          <span class="t" id="c-talk-t">Talk to the guide</span>
+          <span class="s" id="c-talk-s">Put the headset on and have a real conversation.</span>
+        </button>
+        <button class="choice" data-go="explore">
+          <span class="big native" id="c-ex-big">A</span>
+          <span class="t" id="c-ex-t">Words &amp; letters</span>
+          <span class="s">Tap anything to hear it. Greetings, numbers, colours and more.</span>
+        </button>
+        <button class="choice" data-go="name">
+          <span class="big">✍️</span>
+          <span class="t" id="c-name-t">Your name</span>
+          <span class="s" id="c-name-s">Type your name and hear it.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TALK -->
+    <section class="view" id="v-talk" hidden>
+      <div class="talk">
+        <div class="stage">
+          <div class="orb" id="orb"></div>
+          <div class="caption">
+            <div class="said native" id="said">…</div>
+            <div class="gloss" id="gloss"></div>
+          </div>
+          <div class="status" id="talk-status">Tap start when you have the headset on.</div>
+          <div class="row">
+            <button class="btn go" id="btn-start">Start talking</button>
+            <button class="btn stop" id="btn-end" hidden>I'm done</button>
+          </div>
+          <div class="ptt">
+            <label><input type="checkbox" id="ptt-on"> Hold <b>space</b> to talk (better in a noisy room)</label>
+          </div>
+        </div>
+        <aside class="guide">
+          <h3>Try saying</h3>
+          <p class="lead">"How do you say hello?"</p>
+          <ul>
+            <li>"What's your name?"</li>
+            <li>"Teach me to count."</li>
+            <li>"How do I say thank you?"</li>
+            <li id="guide-region">"Where is it spoken?"</li>
+            <li>Then <b>say the word back</b> — she'll cheer you on.</li>
+          </ul>
+          <h3 style="margin-top:22px">Good to know</h3>
+          <ul>
+            <li>Ask her in <b>English</b>. She answers in <span id="guide-lang">the language</span> and explains.</li>
+            <li>She can't grade your pronunciation — she just encourages you.</li>
+          </ul>
+          <button class="back" data-go="home">← back</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- EXPLORE -->
+    <section class="view" id="v-explore" hidden>
+      <div class="tabs" id="tabs"></div>
+      <p class="hint" id="ex-hint"></p>
+      <div class="grid" id="grid"></div>
+      <button class="back" data-go="home">← back</button>
+    </section>
+
+    <!-- NAME -->
+    <section class="view namebox" id="v-name" hidden>
+      <p class="hint" id="name-lead">Type your name.</p>
+      <input id="name-in" placeholder="your name" autocomplete="off" spellcheck="false" maxlength="24">
+      <div class="result native" id="name-out"></div>
+      <div class="row">
+        <button class="btn go" id="btn-hear-name">Hear it</button>
+        <button class="btn" id="btn-clear-name">Clear</button>
+      </div>
+      <p class="fact" id="fact"></p>
+      <button class="back" data-go="home">← back</button>
+    </section>
+  </main>
+</div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------ config */
+const RATE = 44100;            // must match session_create input_format pcm_44100
+const CHUNK_MS = 50;           // 20-100ms is the documented sweet spot
+let CFG = { languages: [], default: "or", ws_version: "2026-08-14",
+            session_seconds: 210, idle_seconds: 35 };
+let LANG = null;               // the selected language record
+
+const $ = (id) => document.getElementById(id);
+const views = { home: $("v-home"), talk: $("v-talk"), explore: $("v-explore"), name: $("v-name") };
+
+/* Script ranges, so the caption can tell the target language from the English
+   around it. The danda U+0964 is Devanagari but Odia, Hindi and others all use
+   it as a full stop, so it belongs to every Indic run. Latin-script languages
+   have no range: nothing to separate. */
+const SCRIPT_RANGES = {
+  or: "\\u0B00-\\u0B7F",
+  hi: "\\u0900-\\u097F",
+  kn: "\\u0C80-\\u0CFF",
+  te: "\\u0C00-\\u0C7F",
+};
+const FACE = { or: "var(--od)", hi: "var(--deva)", kn: "var(--knda)", te: "var(--telu)" };
+
+let toastTimer = null;
+function toast(msg, ms = 4200) {
+  let el = document.querySelector(".toast");
+  if (!el) { el = document.createElement("div"); el.className = "toast"; document.body.appendChild(el); }
+  el.textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.remove(), ms);
+}
+function setState(text, cls = "") {
+  $("state").textContent = text;
+  $("dot").className = "dot" + (cls ? " " + cls : "");
+}
+
+/* ------------------------------------------------------- language selection */
+function scriptRegex() {
+  const r = LANG && SCRIPT_RANGES[LANG.script];
+  return r ? new RegExp("[" + r + "][" + r + "\\u0964\\u0965\\u200C\\u200D\\s.,!?\\u2026]*", "g") : null;
+}
+
+function applyLanguage(code, { announce = false } = {}) {
+  const next = CFG.languages.find((l) => l.code === code) || CFG.languages[0];
+  if (!next) return;
+  if (call.active) endCall("switched language");
+  LANG = next;
+  try { localStorage.setItem("station.lang", LANG.code); } catch (_) {}
+  $("lang").value = LANG.code;
+  document.documentElement.style.setProperty("--face", FACE[LANG.script] || "var(--sans)");
+
+  $("brand-mark").textContent = LANG.native;
+  $("brand-name").textContent = LANG.english + " Language Station";
+  $("hero-hello").textContent = LANG.hello;
+  $("hero-hint").textContent = LANG.hello_hint ? LANG.hello_hint + " — that means hello" : "";
+  $("c-talk-t").textContent = "Talk to " + LANG.agent_name;
+  $("c-talk-s").textContent =
+    "Put the headset on and have a real conversation. " + LANG.agent_name +
+    " teaches you words to say back.";
+  $("c-ex-big").textContent = (LANG.sections[0] && LANG.sections[0].rows[0])
+    ? LANG.sections[0].rows[0].native.slice(0, 1) : "A";
+  $("guide-lang").textContent = LANG.english;
+  $("guide-region").textContent = '"Where is ' + LANG.english + ' spoken?"';
+  $("c-name-t").textContent = LANG.script ? "Your name in " + LANG.english : "Your name in " + LANG.english;
+  $("c-name-s").textContent = LANG.script
+    ? "See your name written in the " + LANG.english + " script, then hear it."
+    : "Hear your name said the way a " + LANG.english + " speaker would.";
+  $("name-lead").textContent = LANG.script
+    ? "Type your name and watch it turn into " + LANG.english + " writing."
+    : "Type your name and hear it with " + LANG.english + " sounds.";
+  if (!LANG.has_agent) toast("No agent configured for " + LANG.english + " yet.", 5000);
+
+  tabIndex = 0;
+  heard.clear();
+  showFact();
+  if (current === "explore") renderExplore();
+  if (current === "name") { $("name-in").value = ""; $("name-out").textContent = ""; }
+  if (current === "talk") { turnBuf = ""; renderSaid(""); }
+  if (announce) toast(LANG.english + " it is. " + LANG.hello + "!", 2600);
+}
+
+function buildPicker() {
+  const sel = $("lang");
+  sel.innerHTML = "";
+  for (const l of CFG.languages) {
+    const o = document.createElement("option");
+    o.value = l.code;
+    o.textContent = l.english + " · " + l.native;
+    sel.appendChild(o);
+  }
+  sel.addEventListener("change", () => { applyLanguage(sel.value, { announce: true }); kickIdle(); });
+}
+
+/* -------------------------------------------------------------- navigation */
+let current = "home";
+function go(name) {
+  if (name !== "talk" && call.active) endCall("left the page");
+  current = name;
+  for (const [k, el] of Object.entries(views)) el.hidden = (k !== name);
+  if (name === "explore") renderExplore();
+  if (name === "name") { $("name-in").value = ""; $("name-out").textContent = ""; $("name-in").focus(); showFact(); }
+  if (name === "talk") { turnBuf = ""; renderSaid(""); }
+  kickIdle();
+}
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-go]");
+  if (!t) return;
+  if (t.dataset.go === "talk") enterKiosk();
+  go(t.dataset.go);
+});
+
+/* --------------------------------------------------- kiosk: fullscreen etc */
+let wakeLock = null;
+async function enterKiosk() {
+  try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); } catch (_) {}
+  try {
+    if ("wakeLock" in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+    }
+  } catch (_) {}
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && !wakeLock) enterKiosk().catch(() => {});
+});
+
+/* ------------------------------------------------------------- idle reset */
+let idleTimer = null;
+function kickIdle() {
+  clearTimeout(idleTimer);
+  const secs = call.active ? CFG.idle_seconds * 3 : CFG.idle_seconds;
+  idleTimer = setTimeout(() => {
+    if (call.active) endCall("quiet for a while");
+    if (current !== "home") { go("home"); toast("Reset for the next person."); }
+  }, secs * 1000);
+}
+["pointerdown", "keydown", "touchstart"].forEach((ev) =>
+  document.addEventListener(ev, kickIdle, { passive: true }));
+
+/* ---------------------------------------------------------- audio: output */
+let outCtx = null;
+const playing = new Set();
+let playhead = 0;
+
+function audioOut() {
+  if (!outCtx) outCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: RATE });
+  if (outCtx.state === "suspended") outCtx.resume();
+  return outCtx;
+}
+function b64ToInt16(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const usable = bytes.length - (bytes.length % 2);
+  return new Int16Array(bytes.buffer, 0, usable / 2);
+}
+function playPcm(int16) {
+  const ctx = audioOut();
+  const f32 = new Float32Array(int16.length);
+  for (let i = 0; i < int16.length; i++) f32[i] = int16[i] / 32768;
+  const buf = ctx.createBuffer(1, f32.length, RATE);
+  buf.copyToChannel(f32, 0);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  const now = ctx.currentTime;
+  if (playhead < now + 0.04) playhead = now + 0.04;
+  src.start(playhead);
+  playhead += buf.duration;
+  playing.add(src);
+  src.onended = () => playing.delete(src);
+  setSpeaking(true);
+  clearTimeout(setSpeaking._t);
+  setSpeaking._t = setTimeout(() => setSpeaking(false), (playhead - now) * 1000 + 180);
+}
+function stopPlayback() {
+  for (const s of playing) { try { s.stop(); } catch (_) {} }
+  playing.clear();
+  playhead = 0;
+  setSpeaking(false);
+}
+function setSpeaking(on) {
+  $("orb").classList.toggle("speaking", on);
+  if (on) $("orb").classList.remove("listening");
+  else if (call.active) $("orb").classList.add("listening");
+}
+
+/* ----------------------------------------------------------- audio: input */
+const WORKLET = `
+class Cap extends AudioWorkletProcessor {
+  process(inputs) {
+    const ch = inputs[0] && inputs[0][0];
+    if (ch) this.port.postMessage(new Float32Array(ch));
+    return true;
+  }
+}
+registerProcessor('cap', Cap);
+`;
+
+function micErrorMessage(err) {
+  const n = err && err.name;
+  if (!window.isSecureContext) return "The browser needs a secure page for the microphone. Open the station at 127.0.0.1, not a LAN address.";
+  if (n === "NotAllowedError") return "The microphone is blocked. Allow it via the icon in Chrome's address bar, then try again.";
+  if (n === "NotFoundError") return "No microphone found. Check the headset is plugged in and selected in System Settings, Sound.";
+  if (n === "NotReadableError") return "The microphone is busy in another app. Quit anything else using it and try again.";
+  return "Could not start the microphone" + (n ? " (" + n + ")" : "") + ".";
+}
+
+/* --------------------------------------------------------------- the call */
+const call = { active: false, ws: null, stream: null, ctx: null, node: null, src: null,
+               pending: [], sendTimer: null, ready: false, endsAt: 0, tick: null,
+               ptt: false, pttDown: false,
+               /* Recovery. The microphone, the audio graph, the clock and the access
+                  token all outlive any one socket, so a socket that drops or goes deaf
+                  is replaced underneath a call that never stopped. */
+               token: null, agentId: null, wsVersion: null, tokenAt: 0,
+               attempts: 0, reopening: false, reopenAt: 0, lastHeard: 0, nudged: 0,
+               readyTimer: null, watchdog: null, quietMic: 0 };
+
+/* How patient to be before assuming the guide is stuck. She only speaks when spoken
+   to, so quiet is normal and these are deliberately generous: a nudge on screen
+   first, and only much later a new socket. Re-opening replays her greeting, which is
+   how a child hears that she is back -- better than silence either way. */
+const RECOVER = { readyMs: 9000, nudgeMs: 15000, reopenMs: 26000, maxAttempts: 6,
+                  backoff: [400, 900, 1800, 3000, 5000, 7000] };
+
+/* The guide mixes her language and English in one turn. Her language is what the
+   child came for, so it becomes the headline and the English drops to the gloss. */
+let turnBuf = "";
+
+function renderSaid(text) {
+  const said = $("said"), gloss = $("gloss");
+  const t = (text || "").trim();
+  if (!t) { said.textContent = "…"; said.className = "said native"; gloss.textContent = ""; return; }
+
+  const re = scriptRegex();
+  if (!re) {
+    // Latin-script language: nothing to separate, so show the turn as it came.
+    said.textContent = t;
+    said.className = "said native" + sizeClass(t.length);
+    gloss.textContent = "";
+    return;
+  }
+
+  const target = (t.match(re) || []).join(" ").replace(/\s+/g, " ").trim();
+  if (!target) {
+    said.textContent = t;
+    said.className = "said plain";
+    gloss.textContent = "";
+    return;
+  }
+
+  // Lifting the target script out strands the punctuation that framed it, e.g.
+  // "Listen first — ଏକ, ଦୁଇ. That is one, two." -> "Listen first — That is one, two."
+  const english = t.replace(re, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,!?;:])/g, "$1")
+    .replace(/[—–]\s*([.,!?;:])/g, "$1")
+    // Only a dash now followed by a capital was framing the target; a dash before
+    // a lowercase word is the guide's own punctuation, so leave that one alone.
+    .replace(/\s[—–]\s(?=[A-Z])/g, ". ")
+    .replace(/^[\s—–,.;:-]+/, "")
+    .replace(/\s*[—–]\s*$/, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  said.textContent = target;
+  said.className = "said native" + sizeClass(target.length);
+  gloss.textContent = english;
+}
+function sizeClass(n) { return n > 60 ? " s3" : n > 26 ? " s2" : ""; }
+
+// Only set on a deployment that anyone on the internet can reach, where an open
+// /api/token would let strangers spend the Cartesia key. Unset at the station.
+function savedPass() {
+  try { return localStorage.getItem("station.pass") || ""; } catch (_) { return ""; }
+}
+
+async function fetchToken() {
+  const pass = savedPass();
+  const r = await fetch("/api/token?lang=" + encodeURIComponent(LANG.code) +
+                        (pass ? "&pass=" + encodeURIComponent(pass) : ""));
+  const tok = await r.json();
+  if (r.status === 401 && tok.need_passcode) {
+    try { localStorage.removeItem("station.pass"); } catch (_) {}  // whatever we had is wrong
+    const e = new Error(tok.error || "passcode needed");
+    e.needPass = true;                     // startCall asks for it and tries once more
+    throw e;
+  }
+  if (!r.ok || !tok.token) throw new Error(tok.error || "no token");
+  call.token = tok.token;
+  call.agentId = tok.agent_id;
+  call.wsVersion = tok.ws_version || CFG.ws_version;
+  call.tokenAt = Date.now();
+  return tok;
+}
+
+async function startCall() {
+  if (call.active) return;
+  $("btn-start").disabled = true;
+  setState("connecting", "warn");
+  $("talk-status").textContent = "Waking " + LANG.agent_name + " up…";
+
+  // Two attempts at most. A missing or stale passcode is worth one prompt;
+  // anything else is the internet being down, which retrying will not fix.
+  let failed = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      await fetchToken();
+      failed = null;
+      break;
+    } catch (e) {
+      failed = e;
+      if (!e.needPass || attempt) break;
+      const given = prompt("Passcode for this station:");
+      if (given === null) break;                                     // they chose not to
+      try { localStorage.setItem("station.pass", given.trim()); } catch (_) {}
+    }
+  }
+  if (failed) {
+    $("btn-start").disabled = false;
+    if (failed.needPass) {
+      setState("locked", "bad");
+      $("talk-status").textContent = "This station needs a passcode before talking works — the words and your name still do.";
+      toast("Passcode needed for talking.", 6000);
+    } else {
+      setState("offline", "bad");
+      $("talk-status").textContent = "Can't reach the internet, so talking is off — but the words and your name still work.";
+      toast("No connection. Try “Words & letters”.", 6000);
+    }
+    return;
+  }
+
+  try {
+    call.stream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+    });
+  } catch (e) {
+    $("btn-start").disabled = false;
+    setState("no mic", "bad");
+    $("talk-status").textContent = micErrorMessage(e);
+    return;
+  }
+
+  call.active = true;
+  call.attempts = 0;
+  call.quietMic = 0;
+  call.endsAt = 0;
+  $("btn-end").hidden = false;
+
+  // The microphone side is built once and kept for the whole visit, so re-opening
+  // the socket later costs nothing and needs no permission prompt.
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: RATE });
+    call.ctx = ctx;
+    const blob = new Blob([WORKLET], { type: "application/javascript" });
+    await ctx.audioWorklet.addModule(URL.createObjectURL(blob));
+    call.src = ctx.createMediaStreamSource(call.stream);
+    call.node = new AudioWorkletNode(ctx, "cap");
+    call.node.port.onmessage = (e) => call.pending.push(e.data);
+    call.src.connect(call.node);
+    const mute = ctx.createGain();   // keep the graph pulling without hearing ourselves
+    mute.gain.value = 0;
+    call.node.connect(mute).connect(ctx.destination);
+  } catch (e) {
+    toast("Microphone setup failed: " + (e.name || e.message));
+    endCall("microphone setup failed");
+    return;
+  }
+
+  // Pump audio on a fixed cadence. Silence still goes out: the server closes the
+  // socket after 120s without a client event and ping frames do not count, so
+  // continuous audio IS the keepalive.
+  const samplesPerChunk = Math.round(RATE * CHUNK_MS / 1000);
+  const quietChunks = Math.round(18000 / CHUNK_MS);
+  call.sendTimer = setInterval(() => {
+    let total = 0;
+    for (const c of call.pending) total += c.length;
+    const speak = !call.ptt || call.pttDown;
+    const out = new Int16Array(samplesPerChunk);
+    let peak = 0;
+    if (speak && total > 0) {
+      const merged = new Float32Array(total);
+      let o = 0;
+      for (const c of call.pending) { merged.set(c, o); o += c.length; }
+      const n = Math.min(samplesPerChunk, merged.length);
+      for (let i = 0; i < n; i++) {
+        const v = Math.max(-1, Math.min(1, merged[i]));
+        if (v > peak) peak = v; else if (-v > peak) peak = -v;
+        out[i] = v < 0 ? v * 32768 : v * 32767;
+      }
+    }
+    call.pending.length = 0;
+    // A headset plugged into the wrong input sends flawless silence, and the guide
+    // then looks broken when the routing is what is broken. Say which it is, once.
+    if (speak) {
+      call.quietMic = peak < 0.004 ? call.quietMic + 1 : 0;
+      if (call.quietMic === quietChunks) {
+        toast("No sound is reaching the microphone — check the headset is picked in System Settings, Sound.", 8000);
+        $("talk-status").textContent = "I can't hear the microphone. Check the headset, then just keep talking.";
+      }
+    }
+    if (!call.ready || !call.ws || call.ws.readyState !== 1) return;
+    let bin = "";
+    const bytes = new Uint8Array(out.buffer);
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    try { call.ws.send(JSON.stringify({ type: "audio_input", audio: btoa(bin) })); } catch (_) {}
+  }, CHUNK_MS);
+
+  openSocket();
+  startWatchdog();
+
+  $("btn-start").hidden = true;
+  $("btn-start").disabled = false;
+}
+
+/* Opens -- or re-opens -- the conversation socket. Everything else about the call
+   carries on untouched, so this can run mid-visit without the child doing anything
+   and without another microphone prompt. */
+function openSocket() {
+  if (!call.active) return;
+  clearTimeout(call.readyTimer);
+  call.ready = false;
+  call.reopening = false;
+  call.reopenAt = 0;
+  turnBuf = "";
+
+  const url = `wss://api.cartesia.ai/v1/agents/websocket/${encodeURIComponent(call.agentId)}`
+            + `?cartesia_version=${encodeURIComponent(call.wsVersion)}`
+            + `&access_token=${encodeURIComponent(call.token)}`;
+  let ws;
+  try { ws = new WebSocket(url); } catch (e) { reopen("could not open the connection"); return; }
+  call.ws = ws;
+
+  ws.onopen = () => {
+    try {
+      ws.send(JSON.stringify({
+        type: "session_create",
+        audio: { input_format: "pcm_44100", output_delivery: "speaking_pace" },
+      }));
+    } catch (_) { reopen("handshake failed"); }
+  };
+
+  ws.onmessage = (ev) => {
+    let m; try { m = JSON.parse(ev.data); } catch (_) { return; }
+    switch (m.type) {
+      case "session_ready":
+        call.ready = true;
+        clearTimeout(call.readyTimer);
+        call.attempts = 0;            // a connection that worked earns a fresh set of tries
+        call.nudged = 0;
+        call.lastHeard = Date.now();
+        setState("talking", "live");
+        $("talk-status").textContent = call.ptt ? "Hold space and speak." : "Go ahead — say hello!";
+        $("orb").classList.add("listening");
+        startClock();
+        break;
+      case "audio_output":
+        call.lastHeard = Date.now();
+        call.nudged = 0;
+        if (m.audio) playPcm(b64ToInt16(m.audio));
+        break;
+      case "audio_output_clear":
+        stopPlayback();
+        break;
+      case "turn_started":
+        call.lastHeard = Date.now();
+        // Each turn starts a fresh caption. Without this the deltas of every turn
+        // pile up and run together.
+        if (m.role === "user" || m.speaker === "user") $("gloss").textContent = "listening…";
+        else { turnBuf = ""; renderSaid(""); }
+        break;
+      case "turn_output_text_delta":
+        call.lastHeard = Date.now();
+        turnBuf += (m.delta || m.text || "");
+        renderSaid(turnBuf);
+        break;
+      case "turn_ended": {
+        call.lastHeard = Date.now();
+        call.nudged = 0;
+        const who = m.role || m.speaker;
+        if (who === "assistant") { turnBuf = m.text || turnBuf; renderSaid(turnBuf); }
+        else if (m.text) $("gloss").textContent = "you said: " + m.text;
+        kickIdle();
+        break;
+      }
+      case "error":
+        // Never hang up on an error. Get a new socket and let her greet them again.
+        if (m.fatal) reopen("the connection dropped");
+        break;
+    }
+  };
+  ws.onclose = () => { if (call.ws === ws) reopen("the connection closed"); };
+  ws.onerror = () => { if (call.ws === ws) reopen("the connection failed"); };
+
+  // A socket that opens but never answers is the worst case, because nothing else
+  // reports it. Give it a few seconds, then treat it as dead.
+  call.readyTimer = setTimeout(() => {
+    if (call.active && call.ws === ws && !call.ready) reopen("she didn't answer");
+  }, RECOVER.readyMs);
+}
+
+/* Everything that used to end the visit comes here instead: a closed socket, a
+   socket that never went ready, a fatal server error, a guide who stopped talking.
+   The call stays alive and gets another socket while there is time on the clock. */
+function reopen(why) {
+  if (!call.active || call.reopening) return;
+  call.reopening = true;
+  call.reopenAt = Date.now();
+
+  const ws = call.ws;
+  call.ws = null;
+  call.ready = false;
+  clearTimeout(call.readyTimer);
+  if (ws) {
+    ws.onclose = ws.onerror = ws.onmessage = ws.onopen = null;
+    try { if (ws.readyState <= 1) ws.close(1000, "reconnect"); } catch (_) {}
+  }
+  stopPlayback();
+
+  const left = call.endsAt ? call.endsAt - Date.now() : CFG.session_seconds * 1000;
+  if (left < 12000) { endCall("time is up"); return; }
+  if (call.attempts >= RECOVER.maxAttempts) {
+    // Six tries in one visit is not a hiccup, it is the network being gone. Saying
+    // so is kinder than another silent wait.
+    endCall("the connection kept dropping");
+    toast("The internet keeps dropping. “Words & letters” still works.", 7000);
+    return;
+  }
+
+  const wait = RECOVER.backoff[Math.min(call.attempts, RECOVER.backoff.length - 1)];
+  call.attempts++;
+  call.nudged = 0;
+  call.lastHeard = Date.now() + wait;    // do not let the watchdog fire during the gap
+  setState("reconnecting", "warn");
+  $("orb").classList.remove("listening", "speaking");
+  $("talk-status").textContent = LANG.agent_name + " is coming back — keep the headset on.";
+  $("gloss").textContent = "one moment…";
+  renderSaid("");
+
+  setTimeout(async () => {
+    if (!call.active) return;
+    // A second failure may be the token rather than the network, so renew it.
+    if (call.attempts >= 2 || Date.now() - call.tokenAt > 800000) {
+      try { await fetchToken(); } catch (_) {}
+    }
+    if (call.active) openSocket();
+  }, wait);
+}
+
+/* Watches for the one failure the socket never reports: still connected, still
+   sending audio, but nothing coming back. */
+function startWatchdog() {
+  clearInterval(call.watchdog);
+  call.lastHeard = Date.now();
+  call.watchdog = setInterval(() => {
+    if (!call.active) return;
+    // Belt and braces. A re-open that never finished would leave the guide gone
+    // for the rest of the visit, which is the one outcome not allowed here, so
+    // an unfinished one gets unstuck rather than waited on forever.
+    if (call.reopening) {
+      if (call.reopenAt && Date.now() - call.reopenAt > 20000) {
+        call.reopening = false;
+        call.reopenAt = 0;
+        openSocket();
+      }
+      return;
+    }
+    if (!call.ready) return;
+    const quiet = Date.now() - call.lastHeard;
+    if (quiet > RECOVER.reopenMs) { reopen("she went quiet"); return; }
+    if (quiet > RECOVER.nudgeMs && !call.nudged) {
+      call.nudged = 1;
+      $("talk-status").textContent = "Still listening — try saying hello again.";
+    }
+  }, 1500);
+}
+
+function startClock() {
+  // Set once per visit, so reconnecting does not hand out extra minutes.
+  if (!call.endsAt) call.endsAt = Date.now() + CFG.session_seconds * 1000;
+  $("timer").hidden = false;
+  if (call.tick) return;
+  call.tick = setInterval(() => {
+    const left = Math.max(0, Math.round((call.endsAt - Date.now()) / 1000));
+    $("timer-t").textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+    if (left <= 0) { endCall("time is up"); toast("That's the end of this turn — thanks for coming!", 6000); }
+  }, 500);
+}
+
+function endCall(why = "") {
+  if (!call.active) return;
+  call.active = false;
+  call.reopening = false;
+  call.reopenAt = 0;
+  clearInterval(call.sendTimer); call.sendTimer = null;
+  clearInterval(call.tick); call.tick = null;
+  clearInterval(call.watchdog); call.watchdog = null;
+  clearTimeout(call.readyTimer); call.readyTimer = null;
+  if (call.ws) {
+    call.ws.onclose = call.ws.onerror = null;    // do not trip the reconnect on the way out
+    try { if (call.ws.readyState <= 1) call.ws.close(1000, "done"); } catch (_) {}
+  }
+  try { call.node && call.node.disconnect(); call.src && call.src.disconnect(); } catch (_) {}
+  try { call.stream && call.stream.getTracks().forEach((t) => t.stop()); } catch (_) {}
+  try { call.ctx && call.ctx.close(); } catch (_) {}
+  call.ws = call.stream = call.ctx = call.node = call.src = null;
+  call.pending.length = 0;
+  call.ready = false;
+  call.endsAt = 0;
+  call.quietMic = 0;
+  stopPlayback();
+  $("timer").hidden = true;
+  $("btn-end").hidden = true;
+  $("btn-start").hidden = false;
+  $("orb").classList.remove("listening", "speaking");
+  setState("ready");
+  $("talk-status").textContent = why
+    ? "Ended — " + why + ". Tap start to go again."
+    : "Tap start when you have the headset on.";
+}
+
+$("btn-start").addEventListener("click", () => { audioOut(); startCall(); });
+$("btn-end").addEventListener("click", () => endCall("you tapped done"));
+$("ptt-on").addEventListener("change", (e) => {
+  call.ptt = e.target.checked;
+  $("talk-status").textContent = call.ptt ? "Hold space and speak." : "Go ahead — say hello!";
+});
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && call.ptt) { call.pttDown = true; if (current === "talk") e.preventDefault(); }
+});
+document.addEventListener("keyup", (e) => { if (e.code === "Space") call.pttDown = false; });
+window.addEventListener("beforeunload", () => endCall());
+// The cards are an auto-fill grid, so a resize changes their width: measure again.
+let refitTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(refitTimer);
+  refitTimer = setTimeout(() => { if (current === "explore") renderExplore(); }, 120);
+});
+
+/* ------------------------------------------------------------- explore UI */
+let tabIndex = 0;
+/* Character count was the old proxy for "does this fit", and it lied: నమస్కారం is
+   eight characters and well over twice the width of an eight-letter German word, so
+   Telugu and Kannada words ran out of their card and over the next one. Measure the
+   text instead, by line count: shrink until it occupies no more than `lines`.
+
+   Measuring with `white-space: nowrap` was the obvious way and the wrong one -- it
+   widens that cell's min-content, which steals width from its neighbours in the
+   shared grid track, so each card got fitted against a different width. Changing only
+   the font size never widens anything, so line counting leaves the layout alone. */
+function fitText(el, max, min, lines) {
+  el.style.fontSize = max + "px";
+  if (!el.clientWidth) return;            // hidden panel: nothing to measure yet
+  let size = max;
+  const fits = () => {
+    const lh = parseFloat(getComputedStyle(el).lineHeight) || size * 1.25;
+    return el.scrollHeight <= lh * (lines + 0.4);
+  };
+  while (size > min && !fits()) {
+    size = Math.max(min, size - Math.max(1, Math.round(size * 0.08)));
+    el.style.fontSize = size + "px";
+  }
+}
+
+function renderExplore() {
+  const secs = (LANG && LANG.sections) || [];
+  const tabs = $("tabs");
+  tabs.innerHTML = "";
+  secs.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.className = "tab";
+    b.textContent = s.title;
+    b.setAttribute("aria-selected", String(i === tabIndex));
+    b.onclick = () => { tabIndex = i; renderExplore(); };
+    tabs.appendChild(b);
+  });
+  const sec = secs[tabIndex];
+  $("ex-hint").textContent = sec ? sec.hint : "";
+  const grid = $("grid");
+  grid.innerHTML = "";
+  const cells = [];
+  (sec ? sec.rows : []).forEach((r) => {
+    const c = document.createElement("button");
+    c.className = "cell";
+    c.innerHTML = '<span class="num native"></span><span class="g native"></span>'
+                + '<span class="r"></span><span class="e"></span>';
+    const num = c.querySelector(".num");
+    if (r.numeral) { num.textContent = r.numeral; c.classList.add("numbered"); }
+    else { num.remove(); }
+    c.querySelector(".g").textContent = r.native;
+    c.querySelector(".r").textContent = r.hint;
+    c.querySelector(".e").textContent = r.gloss;
+    // always speak r.native -- the word. Sending the bare numeral to TTS was the bug.
+    c.onclick = () => speak(r.native, c);
+    grid.appendChild(c);
+    cells.push(c);
+  });
+  // Second pass, once the grid has its real width: shrink anything too wide for its card.
+  for (const c of cells) {
+    const num = c.querySelector(".num");
+    if (num) fitText(num, 44, 24, 1);
+    const g = c.querySelector(".g");
+    // A phrase reads better on two lines than shrunk to fit one; a single word has
+    // nowhere to break (Telugu writes without spaces), so it has to shrink.
+    fitText(g, c.classList.contains("numbered") ? 28 : 40, 22,
+            /\s/.test(g.textContent) ? 2 : 1);
+  }
+}
+
+const heard = new Map();
+async function speak(text, cell) {
+  try {
+    if (cell) {
+      document.querySelectorAll(".cell.playing").forEach((n) => n.classList.remove("playing"));
+      cell.classList.add("playing");
+    }
+    const key = LANG.code + "|" + text;
+    let a = heard.get(key);
+    if (!a) {
+      a = new Audio("/api/say?lang=" + encodeURIComponent(LANG.code)
+                    + "&text=" + encodeURIComponent(text));
+      heard.set(key, a);
+    }
+    a.currentTime = 0;
+    a.onended = () => cell && cell.classList.remove("playing");
+    a.onerror = () => { cell && cell.classList.remove("playing"); toast("Couldn't play that one — the internet may be down."); };
+    await a.play();
+  } catch (_) {
+    cell && cell.classList.remove("playing");
+  }
+}
+
+/* ---------------------------------------------------------------- name UI */
+let nameTimer = null;
+$("name-in").addEventListener("input", (e) => {
+  const v = e.target.value.trim();
+  clearTimeout(nameTimer);
+  if (!v) { $("name-out").textContent = ""; return; }
+  nameTimer = setTimeout(async () => {
+    try {
+      const r = await fetch("/api/name?lang=" + encodeURIComponent(LANG.code)
+                            + "&name=" + encodeURIComponent(v));
+      const d = await r.json();
+      if (d.rendered) $("name-out").textContent = d.rendered;
+    } catch (_) {}
+  }, 160);
+});
+$("btn-hear-name").addEventListener("click", () => {
+  const t = $("name-out").textContent.trim();
+  if (t) speak(t, null); else toast("Type a name first.");
+});
+$("btn-clear-name").addEventListener("click", () => {
+  $("name-in").value = ""; $("name-out").textContent = ""; $("name-in").focus();
+});
+function showFact() {
+  const f = (LANG && LANG.facts) || [];
+  $("fact").textContent = f.length ? f[Math.floor(Math.random() * f.length)] : "";
+}
+
+/* ------------------------------------------------------------------- boot */
+(async function boot() {
+  try {
+    const r = await fetch("/api/config");
+    CFG = Object.assign(CFG, await r.json());
+  } catch (_) {
+    toast("Could not load the station's content. Is server.py still running?", 8000);
+  }
+  if (!CFG.languages.length) { setState("no content", "bad"); return; }
+  buildPicker();
+  let saved = null;
+  try { saved = localStorage.getItem("station.lang"); } catch (_) {}
+  applyLanguage(saved || CFG.default);
+  kickIdle();
+  setState("ready");
+})();
+</script>
+</body>
+</html>

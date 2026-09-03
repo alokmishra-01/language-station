@@ -1,0 +1,144 @@
+<meta charset="utf-8">
+<title>07 · Feature posters (3 sheets)</title>
+<link rel="stylesheet" href="_print.css">
+<style>
+  .f { display: flex; flex-direction: column; }
+  .f .num { font-size: 12pt; font-weight: 800; letter-spacing: .18em;
+            text-transform: uppercase; color: var(--coral); }
+  .f .ic { font-size: 76pt; line-height: 1; margin: 4mm 0 2mm; }
+  .f .ic.od { font-family: var(--od); color: var(--saffron); font-size: 108pt; }
+  .f h1 { font-size: 50pt; font-weight: 800; letter-spacing: -.03em; }
+  .f .sub { font-size: 15pt; line-height: 1.4; color: var(--ink-2); margin: 5mm 0 8mm; }
+
+  .f .block { background: var(--cream); border-radius: 4mm; padding: 6mm 7mm; margin-bottom: 5mm; }
+  .f .block h3 { font-size: 12pt; margin-bottom: 3mm; text-transform: uppercase;
+                 letter-spacing: .1em; color: var(--dim); font-weight: 800; }
+  .f .block .lead { font-family: var(--sans); font-size: 20pt; font-weight: 700;
+                    margin: 0 0 3mm; letter-spacing: -.01em; }
+  .f .block ul { margin: 0; padding-left: 6mm; font-size: 12.5pt; line-height: 1.65; }
+  .f .block ul b { color: var(--coral); }
+
+  .f .tabs { display: flex; flex-wrap: wrap; gap: 3mm; margin-bottom: 5mm; }
+  .f .tabs span { font-size: 13pt; font-weight: 700; border: 1.6pt solid var(--ink);
+                  border-radius: 20mm; padding: 2.5mm 6mm; }
+
+  .f .pairs { display: grid; grid-template-columns: repeat(2,1fr); gap: 4mm; margin-bottom: 5mm; }
+  /* nothing may hang a margin off the bottom of the sheet box: 297mm is 297mm. */
+  .f > *:last-child { margin-bottom: 0; }
+  .f .pairs div { border: 1.5pt solid var(--rule); border-radius: 3.5mm; padding: 3mm 4mm; }
+  .f .pairs .g { font-family: var(--od); font-size: 26pt; line-height: 1.25; }
+  .f .pairs .r { font-size: 9.5pt; color: var(--dim); }
+  .f .pairs .e { font-size: 11pt; font-weight: 700; }
+
+  .f .flow { display: flex; align-items: center; gap: 4mm; margin-bottom: 5mm; }
+  .f .flow .step { flex: 1; border: 1.6pt solid var(--rule); border-radius: 3.5mm;
+                   padding: 4mm 3mm; text-align: center; }
+  .f .flow .step .k { font-size: 9pt; font-weight: 800; color: var(--coral);
+                      letter-spacing: .1em; text-transform: uppercase; }
+  .f .flow .step .v { font-size: 11pt; line-height: 1.35; margin-top: 1.5mm; }
+  .f .flow .step .v.od { font-family: var(--od); font-size: 22pt; }
+  .f .flow .arw { font-size: 20pt; color: var(--teal); font-weight: 800; }
+
+  .f .grows { margin-top: auto; }
+  .f .note { margin-bottom: 0;   /* a <p>'s default bottom margin stacks onto the
+                                     sheet's own padding and spills the page */
+             font-size: 11pt; line-height: 1.5; color: var(--ink-2);
+             border-left: 4pt solid var(--teal); padding-left: 5mm; }
+  .f .note b { color: var(--ink); }
+</style>
+
+<div class="noprint">
+  <b>One poster per thing the screen does.</b> Three sheets, big enough to read from two metres.
+  Pin them in a row on the board behind the table, or stand them in cheap A4 acrylic holders
+  flanking the monitor. Print <code>1 set</code>.
+</div>
+
+<!-- ============ 1 · TALK ============ -->
+<section class="sheet f">
+  <div class="num">On the screen · 1</div>
+  <div class="ic">🎧</div>
+  <h1>Talk to<br>Smruti.</h1>
+  <p class="sub">Put the headset on and have a real conversation with an Odia speaker.
+    She'll teach you words, then ask you to say them back.</p>
+
+  <div class="block">
+    <h3>Try saying</h3>
+    <p class="lead">"How do you say hello?"</p>
+    <ul>
+      <li>"What's your name?"</li>
+      <li>"Teach me to count."</li>
+      <li>"How do I say thank you?"</li>
+      <li>"Tell me something about Odisha."</li>
+      <li>Then <b>say the Odia word back</b> — and watch her face light up.</li>
+    </ul>
+  </div>
+
+  <div class="grows"></div>
+  <p class="note">You ask <b>in English</b>. She answers <b>in Odia</b> and explains. She can't
+    grade your pronunciation — she'll just cheer you on. Three and a half minutes each,
+    then the screen resets for the next person.</p>
+
+  <div class="footer"><span>Odia Language Station</span><span class="od">ଓଡ଼ିଆ</span></div>
+</section>
+
+<!-- ============ 2 · EXPLORE ============ -->
+<section class="sheet f">
+  <div class="num">On the screen · 2</div>
+  <div class="ic od">ଅ</div>
+  <h1>Tap it.<br>Hear it.</h1>
+  <p class="sub">Every letter, digit, colour and greeting on the screen speaks when you touch it.
+    No headset, no queue — walk up and start tapping.</p>
+
+  <div class="tabs">
+    <span>Say hello</span><span>Vowels</span><span>Letters</span>
+    <span>Numbers</span><span>Colours</span><span>Family</span>
+  </div>
+
+  <div class="pairs">
+    <div><div class="g">ନମସ୍କାର</div><div class="r">namaskaara</div><div class="e">hello</div></div>
+    <div><div class="g">ଧନ୍ୟବାଦ</div><div class="r">dhanyabaada</div><div class="e">thank you</div></div>
+    <div><div class="g">କେମିତି ଅଛ?</div><div class="r">kemiti achha?</div><div class="e">how are you?</div></div>
+    <div><div class="g">ମୁଁ ଭଲ ଅଛି</div><div class="r">mun bhala achhi</div><div class="e">I am well</div></div>
+  </div>
+
+  <div class="grows"></div>
+  <p class="note">All of this is stored <b>on the Mac itself</b>. If the school wi-fi dies
+    halfway through the afternoon — and it might — this half of the station carries on
+    working exactly as before.</p>
+
+  <div class="footer"><span>Odia Language Station</span><span class="od">ଓଡ଼ିଆ</span></div>
+</section>
+
+<!-- ============ 3 · NAME ============ -->
+<section class="sheet f">
+  <div class="num">On the screen · 3</div>
+  <div class="ic">✍️</div>
+  <h1>Your name,<br>in Odia.</h1>
+  <p class="sub">Type it in. Watch the letters turn round. Hear an Odia speaker read your own
+    name back to you — probably for the first time in your life.</p>
+
+  <div class="flow">
+    <div class="step"><div class="k">type</div><div class="v">Sophie</div></div>
+    <div class="arw">→</div>
+    <div class="step"><div class="k">see</div><div class="v od">ସୋଫି</div></div>
+    <div class="arw">→</div>
+    <div class="step"><div class="k">hear</div><div class="v">🔊</div></div>
+  </div>
+
+  <div class="block">
+    <h3>Then take it with you</h3>
+    <p class="lead">Copy it onto a card by hand.</p>
+    <ul>
+      <li>Cards and pens are on the table.</li>
+      <li>Go <b>slowly</b> — the curves are the whole point.</li>
+      <li>Yours to keep. Show whoever brought you.</li>
+    </ul>
+  </div>
+
+  <div class="grows"></div>
+  <p class="note">The spelling is worked out by rule, letter by letter, <b>on this machine</b> —
+    nothing is sent anywhere. Some names land better than others. Ask Smruti if yours
+    looks odd.</p>
+
+  <div class="footer"><span>Odia Language Station</span><span class="od">ଓଡ଼ିଆ</span></div>
+</section>

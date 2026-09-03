@@ -1,0 +1,56 @@
+<meta charset="utf-8">
+<title>01 · Hero band (3 sheets)</title>
+<link rel="stylesheet" href="_print.css">
+<style>
+  .hero {
+    padding: 0; background: var(--ink); color: var(--cream);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 20mm 16mm;
+  }
+  .hero .kick { font-size: 11pt; font-weight: 800; letter-spacing: .2em;
+                text-transform: uppercase; color: var(--saffron); margin-bottom: 8mm; }
+  .hero .big { font-size: 118pt; font-weight: 800; line-height: .92;
+               letter-spacing: -.03em; }
+  .hero .big.sm { font-size: 92pt; }
+  .hero .mark { font-family: var(--od); font-size: 150pt;
+                /* Odia vowel marks sit ABOVE the headline (the i in ଓଡ଼ିଆ) and the
+                   nukta below. line-height:1 clips that into the line above, so
+                   this needs real leading, not the tight leading a Latin cap gets. */
+                line-height: 1.28; margin-top: 8mm;
+                color: var(--saffron); }
+  .hero .sub { margin-top: 10mm; font-size: 15pt; line-height: 1.35; color: #c9b8d6; }
+  .hero .arrow { font-size: 60pt; color: var(--teal); line-height: 1; margin-top: 6mm; }
+  .hero .tape { position: absolute; left: 0; right: 0; bottom: 0; }
+</style>
+
+<div class="noprint">
+  <b>Hero band — 3 sheets, hang side by side.</b> Together they are 594&nbsp;mm wide and read
+  as one banner behind the table. No trimming, no alignment: the white edge your printer
+  leaves becomes the frame around each panel.<br>
+  Print <code>1 copy</code>, <b>portrait</b>, <b>Scale 100%</b>, <b>Background graphics ON</b>.
+  These three are the only sheets with a full dark ground — everything else is white paper.
+</div>
+
+<!-- panel 1 -->
+<section class="sheet hero">
+  <div class="kick">Odia Language Station</div>
+  <div class="big">Can<br>you<br>write</div>
+  <div class="tape"><i class="c"></i><i class="s"></i><i class="t"></i></div>
+</section>
+
+<!-- panel 2 -->
+<section class="sheet hero">
+  <div class="big sm">your<br>name</div>
+  <div class="mark">ନାମ</div>
+  <div class="sub">Nine Indian scripts on this table.<br>One of them is round. Come and see why.</div>
+  <div class="tape"><i class="s"></i><i class="t"></i><i class="c"></i></div>
+</section>
+
+<!-- panel 3 -->
+<section class="sheet hero">
+  <div class="big">in<br>this?</div>
+  <div class="mark">ଓଡ଼ିଆ</div>
+  <div class="sub">Type it on the screen. Hear it spoken.<br>Take it home on a card.</div>
+  <div class="arrow">→</div>
+  <div class="tape"><i class="t"></i><i class="c"></i><i class="s"></i></div>
+</section>

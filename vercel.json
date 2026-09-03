@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "mkdir -p public && cp station.html public/index.html",
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.py": {
+      "maxDuration": 30,
+      "excludeFiles": "{.env,.vercel/**,**/.DS_Store,**/__pycache__/**,cache/**,posters/**,public/**,.playwright-mcp/**,agent/backups/**,**/*.pdf,**/*.png,**/*.wav}"
+    }
+  }
+}

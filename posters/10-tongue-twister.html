@@ -1,0 +1,104 @@
+<meta charset="utf-8">
+<title>10 · Tongue twister (TO FILL IN)</title>
+<link rel="stylesheet" href="_print.css">
+<style>
+  .todo { border: 2.5pt dashed var(--coral); border-radius: 4mm; padding: 5.5mm 6mm;
+          margin-top: 4.5mm; background: #fff4f0; }
+  .todo .tag { display: inline-block; background: var(--coral); color: #fff;
+               font-size: 9pt; font-weight: 800; letter-spacing: .12em;
+               text-transform: uppercase; padding: 1.5mm 3mm; border-radius: 1.5mm; }
+  .todo h3 { font-size: 13pt; font-weight: 800; margin-top: 3mm; }
+  .todo p { font-size: 9.5pt; line-height: 1.4; color: var(--ink-2); margin-top: 2mm; }
+  .todo code { font-family: ui-monospace, Menlo, monospace; font-size: 9.5pt;
+               background: #fff; padding: .4mm 1.4mm; border-radius: 1mm;
+               border: .6pt solid var(--rule); }
+  .slot { margin-top: 3.5mm; background: #fff; border: 1pt solid var(--rule);
+          border-radius: 3mm; padding: 4mm 5mm; }
+  .slot .lab { font-size: 8.5pt; letter-spacing: .12em; text-transform: uppercase;
+               color: var(--dim); font-weight: 800; }
+  .rule-line { border-bottom: 1pt dashed var(--dim); height: 12mm; }
+  .rule-line.tall { height: 19mm; }
+  .rule-line.sm { height: 9mm; }
+  .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 4.5mm; }
+  .how .s { border-top: 2.5pt solid var(--teal); padding-top: 3mm; }
+  .how .s .n { font-size: 9pt; font-weight: 800; color: var(--teal);
+               letter-spacing: .1em; }
+  .how .s h4 { font-size: 11pt; font-weight: 800; margin: 1.2mm 0 1.2mm; }
+  .how .s p { font-size: 9pt; line-height: 1.4; color: var(--ink-2); }
+  .sounds { margin-top: 4.5mm; background: var(--cream); border-radius: 4mm; padding: 5mm 6mm; }
+  .sounds h3 { font-size: 12.5pt; font-weight: 800; }
+  .pair { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-top: 3mm; }
+  .pair .p { text-align: center; }
+  .pair .p .g { font-family: var(--od); font-size: 25pt; line-height: 1.1; }
+  .pair .p .r { font-size: 10pt; font-weight: 700; margin-top: 1mm; }
+  .pair .p .d { font-size: 8.5pt; color: var(--ink-2); line-height: 1.35; margin-top: 1mm; }
+</style>
+
+<div class="noprint">
+  <b>⚠ This sheet is not finished, on purpose.</b> <code>TONGUE_TWISTER</code> in
+  <code>content.py</code> is still <code>None</code> — the app author didn't want to invent an
+  Odia twister and teach a child something wrong. You are the Odia speaker.<br><br>
+  <b>Two ways to use this sheet.</b> Either fill the twister into this file and into
+  <code>content.py</code> (then re-run <code>python3 server.py warm</code>) and the coral box
+  disappears from the poster and a new card appears on screen — or print it as it stands and
+  write the twister on the dashed lines by hand, which honestly looks rather good on a table
+  where everything else is printed.<br><br>
+  The bottom half — the four sounds English doesn't have — is finished and correct as it stands,
+  and is worth printing either way. It covers the brief's
+  “👂 sounds and pronunciation” bullet.
+</div>
+
+<section class="sheet">
+  <div class="eyebrow">Sounds &amp; pronunciation · say this out loud</div>
+  <h1 style="font-size:33pt">Four sounds your mouth<br>has never made.</h1>
+  <p class="lede" style="font-size:11.5pt;margin-top:3mm">English has one <b>t</b> and one <b>d</b>. Odia has two of each, and they are
+    different words. Getting them wrong is how everyone starts.</p>
+
+  <div class="todo">
+    <span class="tag">unfinished — needs an Odia speaker</span>
+    <h3>A tongue twister goes here.</h3>
+    <p>Write it in the box below by hand, or add it to <code>TONGUE_TWISTER</code> in
+      <code>content.py</code> so it also appears on screen and can be heard aloud. Nothing on
+      this table should teach a child a word that hasn't been checked by someone who speaks the
+      language.</p>
+    <div class="slot">
+      <div class="lab">In Odia script</div>
+      <div class="rule-line tall"></div>
+      <div class="lab" style="margin-top:4mm">How it sounds</div>
+      <div class="rule-line"></div>
+      <div class="lab" style="margin-top:4mm">What it means in English</div>
+      <div class="rule-line sm"></div>
+    </div>
+  </div>
+
+  <div class="sounds">
+    <h3>Meanwhile — these four are checked, and they are the hard part.</h3>
+    <div class="pair">
+      <div class="p"><div class="g">ତ</div><div class="r">ta</div>
+        <div class="d">tongue <b>behind the teeth</b> — soft, like Italian</div></div>
+      <div class="p"><div class="g">ଟ</div><div class="r">ṭa</div>
+        <div class="d">tongue <b>curled back</b> on the roof — hard, like English <i>t</i></div></div>
+      <div class="p"><div class="g">ଦ</div><div class="r">da</div>
+        <div class="d">tongue <b>behind the teeth</b> — soft <i>d</i></div></div>
+      <div class="p"><div class="g">ଣ</div><div class="r">ṇa</div>
+        <div class="d">an <b>n</b> with the tongue curled back — English has no such letter</div></div>
+    </div>
+    <p style="font-size:9.5pt;line-height:1.45;margin-top:3.5mm;color:var(--ink-2)">
+      Curl the tongue back and you get the <b>retroflex</b> sounds — the ones that make an
+      Indian accent sound Indian. Every Indian language has them; almost no European language
+      does. <b>Tap <span class="od">ତ</span> and <span class="od">ଟ</span> on the screen one
+      after the other</b> and listen for the difference. Most people can't hear it the first
+      time and can't stop hearing it after the third.</p>
+  </div>
+
+  <div class="how">
+    <div class="s"><div class="n">TRY IT</div><h4>Say it slowly</h4>
+      <p>Twice at half speed before you try it fast. Everyone who starts fast fails.</p></div>
+    <div class="s"><div class="n">THEN</div><h4>Say it to Smruti</h4>
+      <p>She'll cheer you on. She can't grade your accent — no software here can.</p></div>
+    <div class="s"><div class="n">THEN</div><h4>Teach a friend</h4>
+      <p>Explaining where your tongue goes is the moment you actually learn it.</p></div>
+  </div>
+
+  <div class="footer"><span>Odia station · sounds</span><span>ତ ଟ ଦ ଣ</span></div>
+</section>

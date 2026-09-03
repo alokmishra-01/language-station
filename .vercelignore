@@ -1,0 +1,13 @@
+# What never leaves this machine. Belt and braces with excludeFiles in
+# vercel.json: this governs the upload, that governs each function bundle.
+.env
+.vercel
+cache/
+posters/
+public/
+.playwright-mcp/
+agent/backups/
+__pycache__/
+*.png
+*.pdf
+*.wav

@@ -1,0 +1,96 @@
+<meta charset="utf-8">
+<title>03 · Why is Odia round?</title>
+<link rel="stylesheet" href="_print.css">
+<style>
+  .deva { font-family: 'Kohinoor Devanagari','Devanagari Sangam MN',serif; }
+  h1.big { font-size: 46pt; font-weight: 800; letter-spacing: -.025em; }
+  .lede { font-size: 13pt; line-height: 1.45; color: var(--ink-2); margin: 4mm 0 8mm; }
+
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-bottom: 8mm; }
+  .panel { border: 1.5pt solid var(--rule); border-radius: 4mm; padding: 4mm; }
+  .panel svg { width: 100%; display: block; }
+  .panel .cap { margin-top: 3mm; font-size: 10.5pt; line-height: 1.4; }
+  .panel .cap b { font-size: 12pt; }
+  .bad b  { color: var(--coral); }
+  .good b { color: var(--teal); }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-bottom: 7mm; }
+  .compare .row { background: var(--cream); border-radius: 4mm; padding: 4mm 5mm; }
+  .compare .glyphs { font-size: 42pt; line-height: 1.25; letter-spacing: .04em; }
+  .compare .who { font-size: 9.5pt; font-weight: 800; letter-spacing: .12em;
+                  text-transform: uppercase; color: var(--dim); }
+  .compare .note { font-size: 10pt; color: var(--ink-2); line-height: 1.4; margin-top: 1mm; }
+
+  .kicker { background: var(--ink); color: var(--cream); border-radius: 4mm;
+            padding: 6mm 7mm; font-size: 13pt; line-height: 1.5; }
+  .kicker b { color: var(--saffron); }
+</style>
+
+<div class="noprint">
+  <b>The payoff poster.</b> This is the answer to Script Detective and the one thing a
+  visitor will still remember at dinner. Print <code>1–2</code> and stand it beside the screen.
+</div>
+
+<section class="sheet">
+  <div class="eyebrow">Script Detective · the answer</div>
+  <h1 class="big">Why is Odia<br>round?</h1>
+  <p class="lede">Because for centuries it was not written on paper. It was scratched into a
+    dried palm leaf with an iron stylus — and a palm leaf has a grain, like wood.</p>
+
+  <div class="panels">
+    <div class="panel bad">
+      <svg viewBox="0 0 300 150" role="img" aria-label="A straight stroke splits the palm leaf">
+        <rect x="8" y="18" width="284" height="114" rx="14" fill="#ded0ab"/>
+        <g stroke="#bda87c" stroke-width="2">
+          <line x1="8" y1="42" x2="292" y2="42"/><line x1="8" y1="60" x2="292" y2="60"/>
+          <line x1="8" y1="78" x2="292" y2="78"/><line x1="8" y1="96" x2="292" y2="96"/>
+          <line x1="8" y1="114" x2="292" y2="114"/>
+        </g>
+        <path d="M150 24 L150 126" stroke="#1d1033" stroke-width="9" stroke-linecap="round"/>
+        <path d="M150 18 l-7 14 l7 12 l-8 14 l8 13 l-7 15 l7 13 l-8 13 l8 20"
+              stroke="#ff7a59" stroke-width="4" fill="none" stroke-linejoin="round"/>
+        <text x="150" y="146" text-anchor="middle" font-family="Helvetica" font-size="13"
+              font-weight="bold" fill="#ff7a59">✗ it splits</text>
+      </svg>
+      <p class="cap"><b>A straight line</b> runs with the grain and slices the leaf clean in
+        two. Your page falls apart in your hands.</p>
+    </div>
+
+    <div class="panel good">
+      <svg viewBox="0 0 300 150" role="img" aria-label="A curved stroke leaves the palm leaf whole">
+        <rect x="8" y="18" width="284" height="114" rx="14" fill="#ded0ab"/>
+        <g stroke="#bda87c" stroke-width="2">
+          <line x1="8" y1="42" x2="292" y2="42"/><line x1="8" y1="60" x2="292" y2="60"/>
+          <line x1="8" y1="78" x2="292" y2="78"/><line x1="8" y1="96" x2="292" y2="96"/>
+          <line x1="8" y1="114" x2="292" y2="114"/>
+        </g>
+        <path d="M104 62 a46 34 0 1 1 92 0 a46 40 0 1 1 -92 0 Z"
+              stroke="#1d1033" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <text x="150" y="146" text-anchor="middle" font-family="Helvetica" font-size="13"
+              font-weight="bold" fill="#2ec4b6">✓ it holds</text>
+      </svg>
+      <p class="cap"><b>A curve</b> keeps crossing the grain and never follows it far enough
+        to tear. So the letters curved — and stayed curved.</p>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="row">
+      <div class="who">Hindi · paper</div>
+      <div class="glyphs deva">क ख ग घ</div>
+      <p class="note">A straight bar across the top.</p>
+    </div>
+    <div class="row">
+      <div class="who">Odia · palm leaf</div>
+      <div class="glyphs od">କ ଖ ଗ ଘ</div>
+      <p class="note">The same four letters, wearing umbrellas.</p>
+    </div>
+  </div>
+
+  <div class="kicker">
+    Every Odia letter is carrying a <b>1,000-year-old workaround</b> for a stationery problem.
+    The leaf is long gone. The curve stayed.
+  </div>
+
+  <div class="footer"><span>Odia Language Station</span><span class="od">ଓଡ଼ିଆ</span></div>
+</section>
