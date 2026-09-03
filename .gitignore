@@ -1,15 +1,22 @@
+# Secrets. .env.example is the exception - it is the shape, with no key in it.
 .env
+.env.*
+!.env.example
+
+# Generated: `python3 server.py warm` rebuilds cache/, vercel.json's
+# buildCommand rebuilds public/, and the builder makes its own uv.lock.
 __pycache__/
 *.pyc
-cache/
-backups/
-.DS_Store
-.playwright-mcp/
-.vercel
-public/
 *.part
+cache/
+public/
 uv.lock
-.vercel/
+agent/backups/
 
-# stray debug screenshots
+# Local tooling
+.vercel/
+.playwright-mcp/
+.DS_Store
+
+# Stray debug screenshots
 /*.png
