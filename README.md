@@ -7,11 +7,15 @@ their own name written in that language.
 
 Seven languages: **Odia, Hindi, Kannada, Telugu, German, Spanish, French.**
 
-Everything runs on this Mac. The only thing that needs the internet is the live
+Everything runs locally. The only thing that needs the internet is the live
 conversation — the words, letters and name-writing keep working without it, because
 their audio is pre-rendered into `cache/`. (That is true of the local station only.
 A [hosted deployment](#deploy-it) has no `cache/` and needs the network for every
 sound, so run the event off the Mac.)
+
+## Inspiration
+
+I recently discovered that Cartesia Sonic 3.6 has added support for my native language (Odia), hence I vibe coded this UI to teach my mother tongue to my kids.
 
 ## Run it
 
@@ -153,7 +157,7 @@ languages.py            ALL content, voices and facts for the seven languages - 
 translit.py             Latin -> Odia / Devanagari / Kannada / Telugu, tuned for names
 agents.json             language code -> Cartesia agent id
 cache/                  pre-rendered audio, 256 phrases (gitignored)
-.env                    CARTESIA_KEY (gitignored, mode 600) - .env.example shows the shape
+.env                    CARTESIA_KEY (should be gitignored, mode 600) - .env.example shows the shape
 api/                    the same five routes as Vercel functions; each is ~10 lines
 vercel.json             build + function config for a hosted deployment
 prewarm.py              warms a deployment's CDN, the hosted answer to `server.py warm`
