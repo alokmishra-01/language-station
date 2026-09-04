@@ -28,6 +28,7 @@
   html, body { height: 100%; margin: 0; }
   body {
     background: radial-gradient(1200px 800px at 20% -10%, var(--bg-2), var(--bg) 60%);
+    background-attachment: fixed;
     color: var(--ink); font-family: var(--sans);
     overflow: hidden; user-select: none; -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -37,30 +38,33 @@
   [hidden] { display: none !important; }
 
   /* ---------- shell ---------- */
-  #shell { height: 100%; display: flex; flex-direction: column; }
+  #shell { height: 100%; display: flex; flex-direction: column;
+           padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
   header { display: flex; align-items: center; gap: 14px; padding: 16px 26px; flex: 0 0 auto; }
   /* the wordmark is a button: it is the way back to the start from any screen,
      including mid-conversation, where the small "back" link is easy to miss */
   .brand { display: flex; align-items: baseline; gap: 12px; min-width: 0; text-align: left;
            padding: 7px 12px; margin-left: -12px; border-radius: 15px;
            transition: background .12s ease; }
-  .brand .mark { font-family: var(--face); font-size: 36px; line-height: 1.2; color: var(--saffron); }
-  .brand .name { font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
-  .brand .home { font-size: 13px; color: var(--teal); opacity: .75; white-space: nowrap; }
+  .brand .mark { font-family: var(--face); font-size: 36px; line-height: 1.2; color: var(--saffron); flex: 0 0 auto; }
+  .brand .name { font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim);
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .brand .home { font-size: 13px; color: var(--teal); opacity: .75; white-space: nowrap; flex: 0 0 auto; }
   .brand:hover { background: #ffffff14; }
   .brand:hover .name { color: var(--ink); }
   .brand:hover .home { opacity: 1; }
   .brand:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
-  .spacer { flex: 1; }
+  .spacer { flex: 1; min-width: 8px; }
 
   /* the language dropdown lives in the header so it is reachable from every view */
-  .picker { display: flex; align-items: center; gap: 9px; }
+  .picker { display: flex; align-items: center; gap: 9px; flex: 0 1 auto; min-width: 0; }
   .picker label { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-dim); }
   select#lang {
     font-family: var(--sans); font-size: 17px; font-weight: 700;
     color: var(--ink); background: #ffffff18; border: 1px solid #ffffff2e;
     border-radius: 999px; padding: 10px 16px; cursor: pointer; outline: none;
     -webkit-appearance: none; appearance: none; padding-right: 38px;
+    max-width: 100%; min-width: 0;
     background-image: linear-gradient(45deg, transparent 50%, var(--ink-dim) 50%),
                       linear-gradient(135deg, var(--ink-dim) 50%, transparent 50%);
     background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
@@ -71,7 +75,8 @@
   select#lang option { color: #16101f; background: #fff; }
 
   .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
-          border-radius: 999px; font-size: 14px; background: #ffffff14; color: var(--ink-dim); }
+          border-radius: 999px; font-size: 14px; background: #ffffff14; color: var(--ink-dim);
+          flex: 0 0 auto; white-space: nowrap; }
   .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-dim); }
   .dot.live { background: var(--teal); box-shadow: 0 0 0 0 #2ec4b6aa; animation: ping 1.8s infinite; }
   .dot.warn { background: var(--saffron); }
@@ -83,11 +88,11 @@
 
   /* ---------- home ---------- */
   .hero { text-align: center; }
-  .hero h1 { font-family: var(--face); font-size: clamp(56px, 10vw, 124px); margin: 0 0 2px; line-height: 1.15;
+  .hero h1 { font-family: var(--face); font-size: clamp(48px, 10vw, 124px); margin: 0 0 2px; line-height: 1.15;
             overflow-wrap: anywhere; }
-  .hero .say { font-size: clamp(17px, 2vw, 22px); color: var(--saffron); margin: 0 0 6px; }
-  .hero p { font-size: clamp(17px, 2.1vw, 24px); color: var(--ink-dim); margin: 0 0 34px; }
-  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+  .hero .say { font-size: clamp(16px, 2vw, 22px); color: var(--saffron); margin: 0 0 6px; }
+  .hero p { font-size: clamp(16px, 2.1vw, 24px); color: var(--ink-dim); margin: 0 0 34px; }
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 18px; }
   .choice {
     background: linear-gradient(160deg, var(--card), var(--card-2));
     border-radius: 24px; padding: 30px 26px; text-align: left;
@@ -103,7 +108,11 @@
 
   /* ---------- talk ---------- */
   .talk { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: stretch; height: min(74vh, 610px); }
-  @media (max-width: 900px) { .talk { grid-template-columns: 1fr; height: auto; } }
+  @media (max-width: 900px) {
+    .talk { grid-template-columns: 1fr; height: auto; }
+    .stage { min-height: min(52vh, 420px); }
+    .guide { max-height: none; }
+  }
   .stage { background: linear-gradient(160deg, var(--card), #2b1a4e); border-radius: 28px;
            padding: 26px 28px; display: flex; flex-direction: column; align-items: center;
            gap: 14px; overflow: hidden; min-height: 0; }
@@ -119,15 +128,15 @@
   .caption { flex: 1 1 auto; min-height: 0; width: 100%; text-align: center;
              display: flex; flex-direction: column; gap: 11px;
              align-items: center; justify-content: center; overflow: hidden; }
-  .caption .said { font-family: var(--face); font-size: clamp(29px, 4vw, 48px); line-height: 1.3; overflow-wrap: anywhere;
+  .caption .said { font-family: var(--face); font-size: clamp(24px, 4vw, 48px); line-height: 1.3; overflow-wrap: anywhere;
                    max-width: 100%; overflow: hidden; display: -webkit-box;
                    -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
-  .caption .said.s2 { font-size: clamp(25px, 3.1vw, 37px); }
-  .caption .said.s3 { font-size: clamp(21px, 2.4vw, 29px); -webkit-line-clamp: 4; }
-  .caption .said.plain { font-family: var(--sans); font-size: clamp(19px, 2.1vw, 26px); line-height: 1.4; -webkit-line-clamp: 4; }
+  .caption .said.s2 { font-size: clamp(22px, 3.1vw, 37px); }
+  .caption .said.s3 { font-size: clamp(19px, 2.4vw, 29px); -webkit-line-clamp: 4; }
+  .caption .said.plain { font-family: var(--sans); font-size: clamp(17px, 2.1vw, 26px); line-height: 1.4; -webkit-line-clamp: 4; }
   .caption .gloss { font-size: 16px; color: var(--ink-dim); line-height: 1.45; max-width: 46ch;
                     overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
-  .status { font-size: 15px; color: var(--ink-dim); flex: 0 0 auto; min-height: 1.4em; }
+  .status { font-size: 15px; color: var(--ink-dim); flex: 0 0 auto; min-height: 1.4em; text-align: center; }
   .stage .row, .stage .ptt { flex: 0 0 auto; }
   .guide { background: #ffffff0f; border-radius: 28px; padding: 24px; overflow-y: auto; }
   .guide h3 { margin: 0 0 6px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--saffron); }
@@ -139,14 +148,15 @@
   .btn:hover { background: #ffffff2b; }
   .btn.go { background: var(--teal); color: #06231f; }
   .btn.stop { background: var(--coral); color: #3b0f0a; }
-  .ptt { font-size: 14px; color: var(--ink-dim); display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 8px; }
+  .ptt { font-size: 14px; color: var(--ink-dim); display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 8px; text-align: center; }
+  .ptt label { line-height: 1.35; }
 
   /* ---------- explore ---------- */
   .tabs { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 16px; }
   .tab { padding: 10px 18px; border-radius: 999px; background: #ffffff12; font-size: 16px; }
   .tab[aria-selected="true"] { background: var(--saffron); color: #35240a; font-weight: 700; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 13px;
-          max-height: 56vh; overflow-y: auto; padding: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(172px, 100%), 1fr)); gap: 13px;
+          max-height: 56vh; overflow-y: auto; padding: 4px; -webkit-overflow-scrolling: touch; }
   .cell { background: linear-gradient(160deg, var(--card), var(--card-2)); border-radius: 20px;
           padding: 18px 14px; text-align: center; transition: transform .1s ease;
           display: flex; flex-direction: column; gap: 6px; align-items: center; }
@@ -171,18 +181,101 @@
   .namebox { text-align: center; }
   .namebox input { font-family: var(--sans); font-size: 28px; padding: 16px 22px; border-radius: 20px;
                    border: 2px solid #ffffff26; background: #ffffff10; color: var(--ink);
-                   width: min(430px, 90vw); text-align: center; outline: none; }
+                   width: min(430px, 100%); max-width: 90vw; text-align: center; outline: none; }
   .namebox input:focus { border-color: var(--saffron); }
-  .result { font-family: var(--face); font-size: clamp(52px, 10vw, 118px); line-height: 1.3; margin: 22px 0 6px;
+  .result { font-family: var(--face); font-size: clamp(40px, 10vw, 118px); line-height: 1.3; margin: 22px 0 6px;
             min-height: 1.3em; overflow-wrap: anywhere; }
   .fact { font-size: 16px; color: var(--ink-dim); max-width: 620px; margin: 22px auto 0; line-height: 1.5; }
 
-  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+  .toast { position: fixed; left: 50%; bottom: max(26px, env(safe-area-inset-bottom)); transform: translateX(-50%);
            background: #120a22e8; border: 1px solid #ffffff20; color: var(--ink);
            padding: 14px 22px; border-radius: 16px; font-size: 16px; max-width: 84vw;
-           box-shadow: 0 14px 40px #0009; }
+           box-shadow: 0 14px 40px #0009; z-index: 20; }
   .back { font-size: 16px; color: var(--ink-dim); padding: 10px 4px; }
   .back:hover { color: var(--ink); }
+
+  /* ---------- mobile / tablet ---------- */
+  /* Below 900px the talk view stacks and can exceed the viewport, so allow scroll. */
+  @media (max-width: 900px) {
+    html, body { height: auto; min-height: 100%; min-height: 100dvh; }
+    body { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+           background-attachment: scroll; }
+    #shell { height: auto; min-height: 100%; min-height: 100dvh; }
+    main { align-items: flex-start; flex: 1 0 auto; }
+    .view { max-height: none; }
+  }
+
+  @media (max-width: 720px) {
+    header {
+      flex-wrap: wrap; gap: 10px 12px; padding: 12px 16px 10px;
+      align-items: center;
+    }
+    .brand { gap: 8px; padding: 4px 8px; margin-left: -8px; max-width: 100%; }
+    .brand .mark { font-size: 28px; }
+    .brand .name { font-size: 12px; letter-spacing: .1em; max-width: 42vw; }
+    .brand .home { display: none; }
+    .spacer { display: none; }
+    .picker { order: 3; flex: 1 1 100%; width: 100%; }
+    .picker label { display: none; }
+    select#lang {
+      width: 100%; font-size: 15px; padding: 10px 14px; padding-right: 36px;
+      background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+    }
+    .pill { padding: 7px 11px; font-size: 13px; }
+    #timer { margin-left: auto; }
+
+    main { padding: 8px 16px 28px; }
+
+    .hero h1 { font-size: clamp(40px, 14vw, 72px); }
+    .hero p { margin-bottom: 22px; }
+    .choices { gap: 12px; grid-template-columns: 1fr; }
+    .choice { min-height: 0; padding: 20px 18px; border-radius: 20px; }
+    .choice .big { font-size: 34px; }
+    .choice .t { font-size: 19px; }
+    .choice .s { font-size: 14px; }
+
+    .talk { gap: 14px; }
+    .stage { padding: 20px 16px; border-radius: 22px; gap: 12px; min-height: 0; }
+    .orb { width: 96px; height: 96px; }
+    .orb.listening { box-shadow: 0 0 0 12px #2ec4b622; }
+    .caption .gloss { font-size: 14px; -webkit-line-clamp: 2; }
+    .guide { padding: 18px 16px; border-radius: 22px; }
+    .guide .lead { font-size: 17px; }
+    .guide li { font-size: 15px; }
+    .btn { padding: 13px 20px; font-size: 16px; width: 100%; max-width: 280px; }
+    .ptt { font-size: 13px; padding: 0 4px; }
+
+    .tabs { gap: 8px; margin-bottom: 12px; }
+    .tab { padding: 9px 14px; font-size: 14px; }
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+      max-height: none; gap: 10px;
+    }
+    .cell { padding: 14px 10px; border-radius: 16px; }
+    .cell .num { font-size: 36px; }
+    .cell .g { font-size: 32px; }
+    .cell.numbered .g { font-size: 22px; }
+    .hint { font-size: 14px; }
+
+    .namebox input { font-size: 22px; padding: 14px 16px; border-radius: 16px; }
+    .fact { font-size: 15px; padding: 0 4px; }
+    .back { display: inline-block; padding: 14px 4px; min-height: 44px; }
+  }
+
+  @media (max-width: 380px) {
+    .brand .name { max-width: 34vw; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .cell .g { font-size: 28px; }
+    .cell .num { font-size: 32px; }
+  }
+
+  /* Short phones / landscape: keep the home choices reachable without clipping */
+  @media (max-height: 700px) and (max-width: 900px) {
+    main { align-items: flex-start; }
+    .hero h1 { font-size: clamp(36px, 10vh, 64px); }
+    .hero p { margin-bottom: 16px; }
+    .choice { padding: 16px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -242,7 +335,7 @@
             <button class="btn stop" id="btn-end" hidden>I'm done</button>
           </div>
           <div class="ptt">
-            <label><input type="checkbox" id="ptt-on"> Hold <b>space</b> to talk (better in a noisy room)</label>
+            <label><input type="checkbox" id="ptt-on"> <span id="ptt-label">Hold <b>space</b> to talk (better in a noisy room)</span></label>
           </div>
         </div>
         <aside class="guide">
@@ -403,7 +496,12 @@ document.addEventListener("click", (e) => {
 
 /* --------------------------------------------------- kiosk: fullscreen etc */
 let wakeLock = null;
+function isPhoneLike() {
+  return window.matchMedia("(max-width: 720px), (pointer: coarse) and (max-width: 1024px)").matches;
+}
 async function enterKiosk() {
+  // Fullscreen on a phone traps the browser chrome and often fails; keep it for the kiosk.
+  if (isPhoneLike()) return;
   try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); } catch (_) {}
   try {
     if ("wakeLock" in navigator && !wakeLock) {
@@ -413,8 +511,23 @@ async function enterKiosk() {
   } catch (_) {}
 }
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && !wakeLock) enterKiosk().catch(() => {});
+  if (document.visibilityState === "visible" && !wakeLock && !isPhoneLike()) enterKiosk().catch(() => {});
 });
+
+function pttHint(on) {
+  if (!on) return "Go ahead — say hello!";
+  return "Hold space and speak.";
+}
+function setupPttLabel() {
+  const el = $("ptt-label");
+  if (!el) return;
+  if (isPhoneLike()) {
+    el.innerHTML = "Push-to-talk needs a keyboard — leave this off on a phone";
+    $("ptt-on").checked = false;
+  } else {
+    el.innerHTML = "Hold <b>space</b> to talk (better in a noisy room)";
+  }
+}
 
 /* ------------------------------------------------------------- idle reset */
 let idleTimer = null;
@@ -743,7 +856,7 @@ function openSocket() {
         call.nudged = 0;
         call.lastHeard = Date.now();
         setState("talking", "live");
-        $("talk-status").textContent = call.ptt ? "Hold space and speak." : "Go ahead — say hello!";
+        $("talk-status").textContent = pttHint(call.ptt);
         $("orb").classList.add("listening");
         startClock();
         break;
@@ -916,7 +1029,7 @@ $("btn-start").addEventListener("click", () => { audioOut(); startCall(); });
 $("btn-end").addEventListener("click", () => endCall("you tapped done"));
 $("ptt-on").addEventListener("change", (e) => {
   call.ptt = e.target.checked;
-  $("talk-status").textContent = call.ptt ? "Hold space and speak." : "Go ahead — say hello!";
+  $("talk-status").textContent = pttHint(call.ptt);
 });
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space" && call.ptt) { call.pttDown = true; if (current === "talk") e.preventDefault(); }
@@ -1063,6 +1176,8 @@ function showFact() {
   let saved = null;
   try { saved = localStorage.getItem("station.lang"); } catch (_) {}
   applyLanguage(saved || CFG.default);
+  setupPttLabel();
+  call.ptt = $("ptt-on").checked;
   kickIdle();
   setState("ready");
 })();
